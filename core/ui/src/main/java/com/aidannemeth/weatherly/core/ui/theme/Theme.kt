@@ -1,4 +1,4 @@
-package com.aidannemeth.core.ui.theme
+package com.aidannemeth.weatherly.core.ui.theme
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme

@@ -2,10 +2,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.aidannemeth.weatherly.core.ui"
+    namespace = "com.aidannemeth.weatherly.core.network"
     compileSdk = 34
 
     defaultConfig {
@@ -34,19 +35,14 @@ android {
     }
 
     buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
+        buildConfig = true
     }
 }
 
 dependencies {
-    implementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material3)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.core.ktx)
+    implementation(libs.hilt.android)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp.logging)
+    implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.retrofit)
 }

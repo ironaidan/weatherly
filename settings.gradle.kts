@@ -18,3 +18,6 @@ rootProject.name = "Weatherly"
 
 include(":app")
 include(":core:ui")
+include(":features:weather")
+include(":features:packing")
+include(":core:network")

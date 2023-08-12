@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.kapt) apply false // Not sure if this is right, but it's the only way I can get the project to compile
 }
 true // Needed to make the Suppress annotation work for the plugins block

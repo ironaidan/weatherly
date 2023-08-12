@@ -3,14 +3,7 @@ package com.aidannemeth.weatherly.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.aidannemeth.core.ui.theme.WeatherlyTheme
+import com.aidannemeth.weatherly.core.ui.theme.WeatherlyTheme
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -22,29 +15,8 @@ class MainActivity : ComponentActivity() {
         Timber.i("onCreate")
         setContent {
             WeatherlyTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                Weatherly()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    WeatherlyTheme {
-        Greeting("Android")
     }
 }

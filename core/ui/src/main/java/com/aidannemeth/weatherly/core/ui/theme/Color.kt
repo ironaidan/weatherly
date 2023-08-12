@@ -1,4 +1,4 @@
-package com.aidannemeth.core.ui.theme
+package com.aidannemeth.weatherly.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

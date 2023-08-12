@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.aidannemeth.weatherly"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.aidannemeth.weatherly"
         minSdk = 33
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -59,6 +59,8 @@ android {
 
 dependencies {
     implementation(project(":core:ui"))
+    implementation(project(":features:packing"))
+    implementation(project(":features:weather"))
 
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -71,13 +73,16 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.startup.runtime)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     testImplementation(libs.junit)
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.timber)
+    implementation(libs.retrofit)
 }
 
 kapt {
