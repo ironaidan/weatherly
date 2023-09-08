@@ -1,8 +1,11 @@
 package com.aidannemeth.weatherly.core.network.di
 
-import com.aidannemeth.weatherly.core.network.retrofit.WeatherService
 import com.aidannemeth.weatherly.core.network.BuildConfig
+import com.aidannemeth.weatherly.core.network.WeatherNetworkDatasource
+import com.aidannemeth.weatherly.core.network.retrofit.RetrofitWeatherNetworkDatasource
+import com.aidannemeth.weatherly.core.network.retrofit.WeatherService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +21,12 @@ private const val BASE_URL = BuildConfig.OPEN_WEATHER_BASE_URL
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object NetworkModule {
+internal abstract class NetworkModule {
+
+    @Binds
+    abstract fun bindWeatherNetworkDatasource(
+        datasource: RetrofitWeatherNetworkDatasource,
+    ): WeatherNetworkDatasource
 
     @Singleton
     @Provides

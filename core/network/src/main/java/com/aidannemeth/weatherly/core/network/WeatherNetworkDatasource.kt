@@ -1,8 +1,8 @@
 package com.aidannemeth.weatherly.core.network
 
-import com.aidannemeth.weatherly.core.network.model.Weather
+import com.aidannemeth.weatherly.core.network.model.NetworkWeather
 
 interface WeatherNetworkDatasource {
 
-    suspend fun getWeather(): Weather
+    suspend fun getWeather(): NetworkWeather
 }

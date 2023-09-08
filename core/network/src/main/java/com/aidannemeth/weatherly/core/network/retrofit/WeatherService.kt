@@ -1,6 +1,6 @@
 package com.aidannemeth.weatherly.core.network.retrofit
 
-import com.aidannemeth.weatherly.core.network.model.Weather
+import com.aidannemeth.weatherly.core.network.model.NetworkWeather
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,5 +12,5 @@ interface WeatherService {
         @Query("lon") longitude: String,
         @Query("appid") apiKey: String,
         @Query("units") units: String,
-    ): Weather
+    ): NetworkWeather
 }
