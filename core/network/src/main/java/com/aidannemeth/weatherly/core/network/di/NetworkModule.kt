@@ -1,6 +1,7 @@
 package com.aidannemeth.weatherly.core.network.di
 
 import com.aidannemeth.weatherly.core.network.retrofit.WeatherService
+import com.aidannemeth.weatherly.core.network.BuildConfig
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -13,7 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-private const val BASE_URL = "https://api.github.com/"
+private const val BASE_URL = BuildConfig.OPEN_WEATHER_BASE_URL
 
 @Module
 @InstallIn(SingletonComponent::class)
