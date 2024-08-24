@@ -1,6 +1,12 @@
 pluginManagement {
     repositories {
-        google()
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -14,13 +20,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "weatherly"
+rootProject.name = "Weatherly"
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
-include(":core:ui")
-include(":features:weather")
-include(":features:packing")
-include(":core:network")
-include(":core:data")
-include(":core:model")
-include(":core:common")
