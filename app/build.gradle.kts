@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.hilt.android)
+    kotlin("kapt")
 }
 
 android {
@@ -56,6 +58,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.app.startup)
@@ -65,8 +71,10 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.hilt.android)
     implementation(libs.timber)
     implementation(platform(libs.androidx.compose.bom))
+    kapt(libs.hilt.android.compiler)
 
     detektPlugins(libs.detekt)
 
