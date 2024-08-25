@@ -63,6 +63,7 @@ kapt {
 }
 
 dependencies {
+    annotationProcessor(libs.room.compiler)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.app.startup)
     implementation(libs.androidx.core.ktx)
@@ -72,9 +73,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.hilt.android)
+    implementation(libs.room)
+    implementation(libs.room.ktx)
     implementation(libs.timber)
     implementation(platform(libs.androidx.compose.bom))
     kapt(libs.hilt.android.compiler)
+    kapt(libs.room.compiler)
 
     detektPlugins(libs.detekt)
 
@@ -86,4 +90,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     testImplementation(libs.junit)
+    testImplementation(libs.room.testing)
 }
