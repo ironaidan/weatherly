@@ -13,7 +13,7 @@ class WeatherlyAppTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun myTest() {
+    fun titleIsDisplayed() {
         composeTestRule.setContent {
             WeatherlyTheme {
                 WeatherlyApp()

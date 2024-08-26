@@ -40,8 +40,11 @@ class WeatherlyDatabaseTest {
 
     @Test
     @Throws(Exception::class)
-    fun insertMatchingIds() = runTest {
-        val weather = WeatherEntity(id = 0)
+    fun insertMatchingIds() {
+        val weather = WeatherEntity(
+            id = 0,
+            temp = 0.0,
+        )
 
         assertThrows(SQLiteConstraintException::class.java) {
             with(weatherDao) {
@@ -54,7 +57,10 @@ class WeatherlyDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun writeAndReadWeather() = runTest {
-        val expected = WeatherEntity(id = 0)
+        val expected = WeatherEntity(
+            id = 0,
+            temp = 0.0,
+        )
 
         weatherDao.insert(expected)
         val actual = weatherDao.get().first()
