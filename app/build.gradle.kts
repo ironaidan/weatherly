@@ -63,7 +63,8 @@ kapt {
 }
 
 dependencies {
-    annotationProcessor(libs.room.compiler)
+    implementation(projects.featureWeather)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.app.startup)
     implementation(libs.androidx.core.ktx)
