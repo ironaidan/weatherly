@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.aidannemeth.weatherly.feature.weather.data"
+    namespace = "com.aidannemeth.weatherly.feature.weather.domain"
     compileSdk = 34
 
     defaultConfig {
@@ -36,7 +36,6 @@ android {
 
 dependencies {
     implementation(libs.hilt.android)
-    implementation(libs.room)
 
     detektPlugins(libs.detekt)
 

@@ -25,3 +25,4 @@ rootProject.name = "Weatherly"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":feature-weather:data")
+include(":feature-weather:domain")
