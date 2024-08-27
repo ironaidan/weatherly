@@ -8,5 +8,5 @@ import javax.inject.Inject
 class ObserveWeather @Inject constructor(
     private val weatherRepository: WeatherRepository,
 ) {
-    operator fun invoke(): Flow<Weather> = weatherRepository.observeWeather()
+    operator fun invoke(): Flow<Weather?> = weatherRepository.observeWeather()
 }

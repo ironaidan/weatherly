@@ -4,5 +4,7 @@ import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
-    fun observeWeather(): Flow<Weather>
+    suspend fun getLocalWeather(): Weather?
+
+    fun observeWeather(): Flow<Weather?>
 }
