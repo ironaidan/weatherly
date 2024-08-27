@@ -12,5 +12,5 @@ interface WeatherDao {
     fun insert(weather: WeatherEntity)
 
     @Query("SELECT * FROM WeatherEntity")
-    fun get(): Flow<WeatherEntity?>
+    fun observe(): Flow<WeatherEntity?>
 }

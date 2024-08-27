@@ -38,6 +38,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.room)
 
+    implementation(projects.featureWeather.domain)
+
     detektPlugins(libs.detekt)
 
     androidTestImplementation(libs.androidx.espresso.core)
