@@ -16,11 +16,16 @@ import javax.inject.Singleton
 object WeatherModule {
     @Provides
     @Singleton
-    fun provideConversationLocalDataSource(db: WeatherDatabase): WeatherLocalDataSource = WeatherLocalDataSourceImpl(db)
+    fun provideConversationLocalDataSource(
+        db: WeatherDatabase,
+    ): WeatherLocalDataSource =
+        WeatherLocalDataSourceImpl(db)
 
     @Provides
     @Singleton
-    fun provideWeatherRepository(weatherLocalDataSource: WeatherLocalDataSource): WeatherRepository =
+    fun provideWeatherRepository(
+        weatherLocalDataSource: WeatherLocalDataSource,
+    ): WeatherRepository =
         WeatherRepositoryImpl(
             weatherLocalDataSource = weatherLocalDataSource,
         )

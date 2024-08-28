@@ -9,7 +9,9 @@ import javax.inject.Inject
 class WeatherRepositoryImpl @Inject constructor(
     private val weatherLocalDataSource: WeatherLocalDataSource,
 ) : WeatherRepository {
-    override suspend fun getLocalWeather(): Weather? = weatherLocalDataSource.getWeather()
+    override suspend fun getLocalWeather(): Weather? =
+        weatherLocalDataSource.getWeather()
 
-    override fun observeWeather(): Flow<Weather?> = weatherLocalDataSource.observeWeather()
+    override fun observeWeather(): Flow<Weather?> =
+        weatherLocalDataSource.observeWeather()
 }
