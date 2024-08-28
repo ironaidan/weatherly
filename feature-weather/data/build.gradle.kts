@@ -32,10 +32,17 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE*"
+        }
+    }
 }
 
 dependencies {
     implementation(libs.hilt.android)
+    implementation(libs.kotlin.coroutines)
     implementation(libs.room)
 
     implementation(projects.featureWeather.domain)
@@ -44,5 +51,11 @@ dependencies {
 
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     testImplementation(libs.junit)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
 }

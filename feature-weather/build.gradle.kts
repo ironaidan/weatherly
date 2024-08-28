@@ -34,5 +34,8 @@ android {
 }
 
 dependencies {
-    api(project(":feature-weather:data"))
+    api(projects.featureWeather.dagger)
+    api(projects.featureWeather.data)
+    api(projects.featureWeather.domain)
+    api(projects.featureWeather.presentation)
 }

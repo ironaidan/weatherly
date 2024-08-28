@@ -12,8 +12,10 @@ import javax.inject.Inject
 class WeatherLocalDataSourceImpl @Inject constructor(
     private val db: WeatherDatabase,
 ) : WeatherLocalDataSource {
-    override suspend fun getWeather(): Weather? = observeWeather().firstOrNull()
+    override suspend fun getWeather(): Weather? =
+        observeWeather().firstOrNull()
 
-    override fun observeWeather(): Flow<Weather?> = db.weatherDao().observe()
-        .mapLatest { it?.toWeather() }
+    override fun observeWeather(): Flow<Weather?> =
+        db.weatherDao().observe()
+            .mapLatest { it?.toWeather() }
 }

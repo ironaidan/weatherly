@@ -41,4 +41,5 @@ dependencies {
 
     implementation(projects.featureWeather.data)
     implementation(projects.featureWeather.domain)
+    implementation(projects.featureWeather.presentation)
 }

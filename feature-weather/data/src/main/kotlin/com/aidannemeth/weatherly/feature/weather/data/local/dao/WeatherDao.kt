@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface WeatherDao {
     @Insert
-    fun insert(weather: WeatherEntity)
+    suspend fun insert(weather: WeatherEntity)
 
     @Query("SELECT * FROM WeatherEntity")
     fun observe(): Flow<WeatherEntity?>
