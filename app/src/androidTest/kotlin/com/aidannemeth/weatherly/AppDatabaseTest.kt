@@ -36,10 +36,7 @@ class AppDatabaseTest {
     @Test
     @Throws(Exception::class)
     fun writeAndReadWeather() = runTest {
-        val expected = WeatherEntity(
-            id = 0,
-            temp = 0.0,
-        )
+        val expected = WeatherEntity(0, 0.0)
 
         weatherDao.insert(expected)
         val actual = weatherDao.observe().first()

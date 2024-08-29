@@ -49,11 +49,9 @@ dependencies {
 
     detektPlugins(libs.detekt)
 
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.mockk.android)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(kotlin("test"))
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.mockk)
