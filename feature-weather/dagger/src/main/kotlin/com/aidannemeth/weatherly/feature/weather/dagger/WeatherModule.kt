@@ -16,7 +16,7 @@ import javax.inject.Singleton
 object WeatherModule {
     @Provides
     @Singleton
-    fun provideConversationLocalDataSource(
+    fun provideWeatherLocalDataSource(
         db: WeatherDatabase,
     ): WeatherLocalDataSource =
         WeatherLocalDataSourceImpl(db)
