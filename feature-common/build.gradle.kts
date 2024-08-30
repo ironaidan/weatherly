@@ -1,11 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.detekt)
 }
 
 android {
-    namespace = "com.aidannemeth.weatherly.feature.weather.presentation"
+    namespace = "com.aidannemeth.weatherly.feature.common"
     compileSdk = 34
 
     defaultConfig {
@@ -32,27 +31,11 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        libs.versions.kotlinCompilerExtensionVersion
-    }
 }
 
 dependencies {
-    detektPlugins(libs.detekt)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.hilt.android)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(projects.featureWeather.domain)
-
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.junit)
-    testImplementation(libs.junit)
+    api(projects.featureCommon.dagger)
+    api(projects.featureCommon.data)
+    api(projects.featureCommon.domain)
+    api(projects.featureCommon.presentation)
 }

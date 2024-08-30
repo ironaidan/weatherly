@@ -41,7 +41,7 @@ class ObserveWeatherTest {
     }
 
     @Test
-    fun `observe weather returns null when not existing in repository`() = runTest {
+    fun `observe weather returns data error when not existing in repository`() = runTest {
         val expected = DataError.Local.NoCachedData.left()
         every { weatherRepository.observeWeather() } returns flowOf(expected)
 

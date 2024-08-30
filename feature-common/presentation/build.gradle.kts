@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.aidannemeth.weatherly.feature.weather.presentation"
+    namespace = "com.aidannemeth.weatherly.feature.common.presentation"
     compileSdk = 34
 
     defaultConfig {
@@ -44,15 +44,7 @@ android {
 
 dependencies {
     detektPlugins(libs.detekt)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.hilt.android)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(projects.featureWeather.domain)
-
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.junit)
-    testImplementation(libs.junit)
+    implementation(projects.featureCommon.domain)
 }

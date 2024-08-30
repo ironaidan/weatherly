@@ -24,6 +24,10 @@ rootProject.name = "Weatherly"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
+include(":feature-common:dagger")
+include(":feature-common:data")
+include(":feature-common:domain")
+include(":feature-common:presentation")
 include(":feature-weather:dagger")
 include(":feature-weather:data")
 include(":feature-weather:domain")

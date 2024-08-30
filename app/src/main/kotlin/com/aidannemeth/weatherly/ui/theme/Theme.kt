@@ -93,8 +93,7 @@ fun WeatherlyTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme =
-        when {
+    val colorScheme = when {
             dynamicColor -> {
                 val context = LocalContext.current
                 if (darkTheme) {

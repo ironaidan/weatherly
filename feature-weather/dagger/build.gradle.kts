@@ -35,9 +35,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.hilt.android)
-
     detektPlugins(libs.detekt)
+    implementation(libs.hilt.android)
 
     implementation(projects.featureWeather.data)
     implementation(projects.featureWeather.domain)

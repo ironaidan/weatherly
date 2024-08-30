@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.timber)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(projects.featureCommon)
     implementation(projects.featureWeather)
     kapt(libs.hilt.android.compiler)
     kapt(libs.room.compiler)

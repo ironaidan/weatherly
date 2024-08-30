@@ -41,7 +41,7 @@ class WeatherRepositoryImplTest {
     }
 
     @Test
-    fun `get weather returns null when not existing locally`() = runTest {
+    fun `get weather returns data error when not existing locally`() = runTest {
         val expected = DataError.Local.NoCachedData.left()
         coEvery { weatherLocalDataSource.getWeather() } returns expected
 
@@ -63,7 +63,7 @@ class WeatherRepositoryImplTest {
     }
 
     @Test
-    fun `observe weather returns null when not existing locally`() = runTest {
+    fun `observe weather returns data error when not existing locally`() = runTest {
         val expected = DataError.Local.NoCachedData.left()
         every { weatherLocalDataSource.observeWeather() } returns flowOf(expected)
 

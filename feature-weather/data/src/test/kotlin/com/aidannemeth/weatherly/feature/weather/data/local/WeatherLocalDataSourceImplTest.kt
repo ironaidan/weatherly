@@ -44,7 +44,7 @@ class WeatherLocalDataSourceImplTest {
     }
 
     @Test
-    fun `get weather returns null from db when not existing in db`() = runTest {
+    fun `get weather returns data error from db when not existing in db`() = runTest {
         val expected = DataError.Local.NoCachedData.left()
         every { weatherDao.observe() } returns flowOf(null)
 
@@ -67,7 +67,7 @@ class WeatherLocalDataSourceImplTest {
     }
 
     @Test
-    fun `observe weather returns null from db when not existing in db`() = runTest {
+    fun `observe weather returns data error from db when not existing in db`() = runTest {
         val expected = DataError.Local.NoCachedData.left()
         every { weatherDao.observe() } returns flowOf(null)
 
