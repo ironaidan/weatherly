@@ -3,9 +3,9 @@ package com.aidannemeth.weatherly.feature.weather.data.repository
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import com.aidannemeth.weatherly.feature.common.domain.model.DataError
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
-import com.aidannemeth.weatherly.feature.weather.domain.repository.DataError
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherLocalDataSource
 import io.mockk.coEvery
 import io.mockk.coVerify

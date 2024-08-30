@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.kotlin.coroutines)
     implementation(libs.room)
     implementation(platform(libs.arrow.bom))
+    implementation(projects.featureCommon.domain)
     implementation(projects.featureWeather.domain)
 
     androidTestImplementation(libs.androidx.junit)

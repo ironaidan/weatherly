@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.arrow.bom))
+    implementation(projects.featureCommon.domain)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.mockk.android)

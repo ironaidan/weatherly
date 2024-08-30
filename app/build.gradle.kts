@@ -62,6 +62,8 @@ kapt {
 }
 
 dependencies {
+    debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(libs.androidx.ui.tooling)
     detektPlugins(libs.detekt)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.app.startup)
@@ -81,9 +83,6 @@ dependencies {
     implementation(projects.featureWeather)
     kapt(libs.hilt.android.compiler)
     kapt(libs.room.compiler)
-
-    debugImplementation(libs.androidx.ui.test.manifest)
-    debugImplementation(libs.androidx.ui.tooling)
 
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

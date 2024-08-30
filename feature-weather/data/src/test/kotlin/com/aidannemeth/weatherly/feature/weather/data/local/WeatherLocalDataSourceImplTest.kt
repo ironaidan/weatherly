@@ -3,10 +3,10 @@ package com.aidannemeth.weatherly.feature.weather.data.local
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
+import com.aidannemeth.weatherly.feature.common.domain.model.DataError
 import com.aidannemeth.weatherly.feature.weather.data.local.dao.WeatherDao
 import com.aidannemeth.weatherly.feature.weather.data.local.entity.WeatherEntity
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
-import com.aidannemeth.weatherly.feature.weather.domain.repository.DataError
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

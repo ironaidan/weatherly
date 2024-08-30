@@ -1,8 +1,8 @@
 package com.aidannemeth.weatherly.feature.weather.domain.repository
 
 import arrow.core.Either
+import com.aidannemeth.weatherly.feature.common.domain.model.DataError.Local.NoCachedData
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
-import com.aidannemeth.weatherly.feature.weather.domain.repository.DataError.Local.NoCachedData
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
