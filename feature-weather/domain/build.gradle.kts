@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.detekt)
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -35,9 +36,12 @@ android {
 }
 
 dependencies {
-    implementation(libs.hilt.android)
-
     detektPlugins(libs.detekt)
+    implementation(libs.arrow.core)
+    implementation(libs.arrow.fx.coroutines)
+    implementation(libs.hilt.android)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(platform(libs.arrow.bom))
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.mockk.android)

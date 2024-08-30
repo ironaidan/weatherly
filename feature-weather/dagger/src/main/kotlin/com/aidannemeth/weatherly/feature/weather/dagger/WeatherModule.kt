@@ -26,7 +26,5 @@ object WeatherModule {
     fun provideWeatherRepository(
         weatherLocalDataSource: WeatherLocalDataSource,
     ): WeatherRepository =
-        WeatherRepositoryImpl(
-            weatherLocalDataSource = weatherLocalDataSource,
-        )
+        WeatherRepositoryImpl(weatherLocalDataSource)
 }

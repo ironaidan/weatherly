@@ -1,7 +1,11 @@
 package com.aidannemeth.weatherly.feature.weather.domain.usecase
 
 import app.cash.turbine.test
+import arrow.core.left
+import arrow.core.right
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
+import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
+import com.aidannemeth.weatherly.feature.weather.domain.repository.DataError
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -13,7 +17,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 class ObserveWeatherTest {
-    private val weather = Weather(0.00)
+    private val weather = Weather(Temperature(0.00))
 
     private val weatherRepository = mockk<WeatherRepository>()
 
@@ -26,7 +30,7 @@ class ObserveWeatherTest {
 
     @Test
     fun `observe weather returns weather when existing in repository`() = runTest {
-        val expected = weather
+        val expected = weather.right()
         every { weatherRepository.observeWeather() } returns flowOf(expected)
 
         observeWeather().test {
@@ -38,7 +42,7 @@ class ObserveWeatherTest {
 
     @Test
     fun `observe weather returns null when not existing in repository`() = runTest {
-        val expected = null
+        val expected = DataError.Local.NoCachedData.left()
         every { weatherRepository.observeWeather() } returns flowOf(expected)
 
         observeWeather().test {
@@ -50,8 +54,8 @@ class ObserveWeatherTest {
 
     @Test
     fun `observe weather emits weather and observes updates`() = runTest {
-        val firstExpected = null
-        val secondExpected = Weather(0.00)
+        val firstExpected = DataError.Local.NoCachedData.left()
+        val secondExpected = weather.right()
         val expectedFlow = flowOf(firstExpected, secondExpected)
         every { weatherRepository.observeWeather() } returns expectedFlow
 

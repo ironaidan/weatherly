@@ -41,13 +41,14 @@ android {
 }
 
 dependencies {
+    detektPlugins(libs.detekt)
+    implementation(libs.arrow.core)
+    implementation(libs.arrow.fx.coroutines)
     implementation(libs.hilt.android)
     implementation(libs.kotlin.coroutines)
     implementation(libs.room)
-
+    implementation(platform(libs.arrow.bom))
     implementation(projects.featureWeather.domain)
-
-    detektPlugins(libs.detekt)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.mockk.android)

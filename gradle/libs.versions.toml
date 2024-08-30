@@ -2,6 +2,7 @@
 activityCompose = "1.9.1"
 agp = "8.5.2"
 appStartup = "1.1.1"
+arrow = "1.2.4"
 composeBom = "2024.08.00"
 coreKtx = "1.13.1"
 coroutines = "1.8.1"
@@ -15,6 +16,7 @@ kotlinCompilerExtensionVersion = "1.5.1"
 lifecycleRuntimeKtx = "2.8.4"
 mockk = "1.13.12"
 room = "2.6.1"
+serialization = "1.6.2"
 timber = "5.0.1"
 turbine = "1.1.0"
 
@@ -33,12 +35,16 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+arrow-bom = { group = "io.arrow-kt", name = "arrow-stack", version.ref = "arrow" }
+arrow-core = { group = "io.arrow-kt", name = "arrow-core" }
+arrow-fx-coroutines = { group = "io.arrow-kt", name = "arrow-fx-coroutines" }
 detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -55,3 +61,4 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 hilt_android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

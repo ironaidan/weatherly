@@ -1,8 +1,12 @@
 package com.aidannemeth.weatherly.feature.weather.data.local
 
 import app.cash.turbine.test
+import arrow.core.left
+import arrow.core.right
 import com.aidannemeth.weatherly.feature.weather.data.local.dao.WeatherDao
 import com.aidannemeth.weatherly.feature.weather.data.local.entity.WeatherEntity
+import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
+import com.aidannemeth.weatherly.feature.weather.domain.repository.DataError
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -13,7 +17,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 class WeatherLocalDataSourceImplTest {
-    private val weatherEntity = WeatherEntity(0, 0.00)
+    private val weatherEntity = WeatherEntity(0, Temperature(0.00))
 
     private val weatherDao = mockk<WeatherDao>()
 
@@ -30,7 +34,7 @@ class WeatherLocalDataSourceImplTest {
 
     @Test
     fun `get weather returns weather from db when existing in db`() = runTest {
-        val expected = weatherEntity.toWeather()
+        val expected = weatherEntity.toWeather().right()
         every { weatherDao.observe() } returns flowOf(weatherEntity)
 
         val actual = weatherLocalDataSource.getWeather()
@@ -41,8 +45,8 @@ class WeatherLocalDataSourceImplTest {
 
     @Test
     fun `get weather returns null from db when not existing in db`() = runTest {
-        val expected = null
-        every { weatherDao.observe() } returns flowOf(expected)
+        val expected = DataError.Local.NoCachedData.left()
+        every { weatherDao.observe() } returns flowOf(null)
 
         val actual = weatherLocalDataSource.getWeather()
 
@@ -52,7 +56,7 @@ class WeatherLocalDataSourceImplTest {
 
     @Test
     fun `observe weather returns weather from db when existing in db`() = runTest {
-        val expected = weatherEntity.toWeather()
+        val expected = weatherEntity.toWeather().right()
         every { weatherDao.observe() } returns flowOf(weatherEntity)
 
         weatherLocalDataSource.observeWeather().test {
@@ -64,8 +68,8 @@ class WeatherLocalDataSourceImplTest {
 
     @Test
     fun `observe weather returns null from db when not existing in db`() = runTest {
-        val expected = null
-        every { weatherDao.observe() } returns flowOf(expected)
+        val expected = DataError.Local.NoCachedData.left()
+        every { weatherDao.observe() } returns flowOf(null)
 
         weatherLocalDataSource.observeWeather().test {
             assertEquals(expected, awaitItem())
@@ -76,8 +80,8 @@ class WeatherLocalDataSourceImplTest {
 
     @Test
     fun `observe weather emits weather and observes updates`() = runTest {
-        val firstExpected = null
-        val secondExpected = weatherEntity.toWeather()
+        val firstExpected = DataError.Local.NoCachedData.left()
+        val secondExpected = weatherEntity.toWeather().right()
         val expectedFlow = flowOf(null, weatherEntity)
         every { weatherDao.observe() } returns expectedFlow
 

@@ -6,6 +6,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import com.aidannemeth.weatherly.db.AppDatabase
 import com.aidannemeth.weatherly.feature.weather.data.local.dao.WeatherDao
 import com.aidannemeth.weatherly.feature.weather.data.local.entity.WeatherEntity
+import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.equalTo
@@ -35,10 +36,20 @@ class AppDatabaseTest {
 
     @Test
     @Throws(Exception::class)
-    fun writeAndReadWeather() = runTest {
-        val expected = WeatherEntity(0, 0.0)
+    fun `observe returns weather when existing in db`() = runTest {
+        val expected = WeatherEntity(0, Temperature(0.0))
 
         weatherDao.insert(expected)
+        val actual = weatherDao.observe().first()
+
+        assertThat(actual, equalTo(expected))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun `observe returns null when weather not existing in db`() = runTest {
+        val expected = null
+
         val actual = weatherDao.observe().first()
 
         assertThat(actual, equalTo(expected))
