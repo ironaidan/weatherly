@@ -27,7 +27,7 @@ class ObserveWeatherTest {
     private lateinit var observeWeather: ObserveWeather
 
     @Before
-    fun setUp() {
+    fun setup() {
         observeWeather = ObserveWeather(dispatcher, weatherRepository)
     }
 

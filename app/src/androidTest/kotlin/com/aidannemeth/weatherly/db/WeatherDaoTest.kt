@@ -14,7 +14,7 @@ import org.junit.Before
 import org.junit.Test
 import java.io.IOException
 
-class AppDatabaseTest {
+class WeatherDaoTest {
     private lateinit var weatherDao: WeatherDao
     private lateinit var db: AppDatabase
 

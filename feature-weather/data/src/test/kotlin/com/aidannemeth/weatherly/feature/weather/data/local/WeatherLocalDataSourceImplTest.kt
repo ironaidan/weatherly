@@ -28,7 +28,7 @@ class WeatherLocalDataSourceImplTest {
     private lateinit var weatherLocalDataSource: WeatherLocalDataSourceImpl
 
     @Before
-    fun setUp() {
+    fun setup() {
         weatherLocalDataSource = WeatherLocalDataSourceImpl(db)
     }
 

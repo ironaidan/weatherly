@@ -26,7 +26,7 @@ class WeatherRepositoryImplTest {
     private lateinit var weatherRepository: WeatherRepositoryImpl
 
     @Before
-    fun setUp() {
+    fun setup() {
         weatherRepository = WeatherRepositoryImpl(weatherLocalDataSource)
     }
 
