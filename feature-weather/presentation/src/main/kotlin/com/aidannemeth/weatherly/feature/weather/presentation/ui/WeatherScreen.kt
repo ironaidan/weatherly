@@ -1,4 +1,4 @@
-package com.aidannemeth.weatherly
+package com.aidannemeth.weatherly.feature.weather.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,14 +9,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.aidannemeth.weatherly.ui.theme.WeatherlyTheme
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.aidannemeth.weatherly.feature.weather.presentation.viewmodel.WeatherViewModel
 
 @Composable
-fun WeatherlyApp() {
+fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
         Surface(modifier = Modifier.padding(paddingValues)) {
             Column(
@@ -25,7 +29,7 @@ fun WeatherlyApp() {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = stringResource(id = R.string.app_name),
+                    text = state,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.titleLarge,
                 )
@@ -36,8 +40,6 @@ fun WeatherlyApp() {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    WeatherlyTheme {
-        WeatherlyApp()
-    }
+fun WeatherScreenPreview() {
+    WeatherScreen()
 }

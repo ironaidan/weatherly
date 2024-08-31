@@ -45,11 +45,14 @@ android {
 
 dependencies {
     detektPlugins(libs.detekt)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(projects.featureWeather.domain)
 

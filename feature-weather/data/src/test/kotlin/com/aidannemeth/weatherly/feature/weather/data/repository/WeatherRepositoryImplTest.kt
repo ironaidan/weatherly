@@ -3,7 +3,7 @@ package com.aidannemeth.weatherly.feature.weather.data.repository
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
-import com.aidannemeth.weatherly.feature.common.domain.model.DataError
+import com.aidannemeth.weatherly.feature.common.domain.model.DataError.Local.NoCachedData
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherLocalDataSource
@@ -42,7 +42,7 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun `get weather returns data error when not existing locally`() = runTest {
-        val expected = DataError.Local.NoCachedData.left()
+        val expected = NoCachedData.left()
         coEvery { weatherLocalDataSource.getWeather() } returns expected
 
         val actual = weatherRepository.getLocalWeather()
@@ -64,7 +64,7 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun `observe weather returns data error when not existing locally`() = runTest {
-        val expected = DataError.Local.NoCachedData.left()
+        val expected = NoCachedData.left()
         every { weatherLocalDataSource.observeWeather() } returns flowOf(expected)
 
         weatherRepository.observeWeather().test {
@@ -76,7 +76,7 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun `observe weather emits weather and observes updates`() = runTest {
-        val firstExpected = DataError.Local.NoCachedData.left()
+        val firstExpected = NoCachedData.left()
         val secondExpected = weather.right()
         val expectedFlow = flowOf(firstExpected, secondExpected)
         every { weatherLocalDataSource.observeWeather() } returns expectedFlow

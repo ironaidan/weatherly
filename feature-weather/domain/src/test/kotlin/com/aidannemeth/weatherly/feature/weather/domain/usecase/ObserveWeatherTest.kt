@@ -3,7 +3,7 @@ package com.aidannemeth.weatherly.feature.weather.domain.usecase
 import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
-import com.aidannemeth.weatherly.feature.common.domain.model.DataError
+import com.aidannemeth.weatherly.feature.common.domain.model.DataError.Local.NoCachedData
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRepository
@@ -45,7 +45,7 @@ class ObserveWeatherTest {
 
     @Test
     fun `observe weather returns data error when not existing in repository`() = runTest(dispatcher) {
-        val expected = DataError.Local.NoCachedData.left()
+        val expected = NoCachedData.left()
         every { weatherRepository.observeWeather() } returns flowOf(expected)
 
         observeWeather().test {
@@ -57,7 +57,7 @@ class ObserveWeatherTest {
 
     @Test
     fun `observe weather emits weather and observes updates`() = runTest(dispatcher) {
-        val firstExpected = DataError.Local.NoCachedData.left()
+        val firstExpected = NoCachedData.left()
         val secondExpected = weather.right()
         val expectedFlow = flowOf(firstExpected, secondExpected)
         every { weatherRepository.observeWeather() } returns expectedFlow

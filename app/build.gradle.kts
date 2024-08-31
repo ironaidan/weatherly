@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt.android)
     kotlin("kapt")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -70,11 +71,13 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.hilt.android)
     implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.room)
     implementation(libs.room.ktx)
     implementation(libs.timber)
