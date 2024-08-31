@@ -1,9 +1,8 @@
-package com.aidannemeth.weatherly
+package com.aidannemeth.weatherly.db
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
-import com.aidannemeth.weatherly.db.AppDatabase
 import com.aidannemeth.weatherly.feature.weather.data.local.dao.WeatherDao
 import com.aidannemeth.weatherly.feature.weather.data.local.entity.WeatherEntity
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
