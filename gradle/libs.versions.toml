@@ -17,6 +17,8 @@ kotlinCompilerExtensionVersion = "1.5.1"
 lifecycle = "2.8.4"
 mockk = "1.13.12"
 navigation = "2.8.0-rc01"
+retrofit = "2.11.0"
+retrofitSerialization = "1.0.0"
 room = "2.6.1"
 serialization = "1.6.2"
 timber = "5.0.1"
@@ -43,6 +45,7 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 arrow-bom = { group = "io.arrow-kt", name = "arrow-stack", version.ref = "arrow" }
 arrow-core = { group = "io.arrow-kt", name = "arrow-core" }
+arrow-core-retrofit = { group = "io.arrow-kt", name = "arrow-core-retrofit" }
 arrow-fx-coroutines = { group = "io.arrow-kt", name = "arrow-fx-coroutines" }
 detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -55,6 +58,8 @@ kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coro
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitSerialization" }
 room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }

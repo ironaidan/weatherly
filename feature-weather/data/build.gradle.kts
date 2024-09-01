@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -45,9 +46,12 @@ android {
 dependencies {
     detektPlugins(libs.detekt)
     implementation(libs.arrow.core)
+    implementation(libs.arrow.core.retrofit)
     implementation(libs.arrow.fx.coroutines)
     implementation(libs.hilt.android)
     implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit)
     implementation(libs.room)
     implementation(platform(libs.arrow.bom))
     implementation(projects.featureCommon.domain)
