@@ -46,6 +46,7 @@ android {
 }
 
 dependencies {
+    debugImplementation(libs.androidx.ui.tooling)
     detektPlugins(libs.detekt)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel)
@@ -56,6 +57,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(projects.featureCommon.presentation)
     implementation(projects.featureWeather.domain)
     kapt(libs.hilt.android.compiler)
 

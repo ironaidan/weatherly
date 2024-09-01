@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.aidannemeth.weatherly.navigation.Home
-import com.aidannemeth.weatherly.ui.theme.WeatherlyTheme
+import com.aidannemeth.weatherly.feature.common.presentation.theme.WeatherlyTheme
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
