@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WeatherResponse(
     @SerialName("lat")
-    val latitude: Float,
+    val latitude: Double,
     @SerialName("lon")
-    val longitude: Float,
+    val longitude: Double,
     val timezone: String,
     @SerialName("timezone_offset")
     val timezoneOffset: Int,
@@ -133,6 +133,7 @@ data class WeatherResponse(
 
     @Serializable
     data class Alert(
+        @SerialName("sender_name")
         val senderName: String,
         val event: String,
         val start: Long,

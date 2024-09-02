@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class WeatherLocalDataSourceImpl @Inject constructor(
     private val db: WeatherDatabase,
 ) : WeatherLocalDataSource {
     override suspend fun getWeather(): Either<NoCachedData, Weather> =
         observeWeather().first()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun observeWeather(): Flow<Either<NoCachedData, Weather>> =
         db.weatherDao().observe()
             .mapLatest { entity ->
