@@ -9,22 +9,35 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
 import okio.Buffer
+import java.util.concurrent.TimeUnit
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+private const val BASE_URL = "/test/"
+
 class WeatherApiTest {
     private lateinit var server: MockWebServer
 
-    private val baseUrl = "/test/"
-
     private val weatherApi by lazy {
-        val baseUrl = server.url(baseUrl)
+        val baseUrl = server.url(BASE_URL)
         val retrofit = buildRetrofit(baseUrl.toString(), Json { ignoreUnknownKeys = true })
         retrofit.create(WeatherApi::class.java)
     }
+
+    private val resourcePath = "assets/mock_get_weather_response.json"
+
+    private val json by lazy {
+        this::class.java.classLoader
+            ?.getResourceAsStream(resourcePath)
+            .let { requireNotNull(it) { "Could not find resource file: $resourcePath" } }
+            .bufferedReader()
+            .use { it.readText() }
+    }
+
+    private val expected = WeatherResponseSample.build().right()
 
     @BeforeTest
     fun setup() {
@@ -43,7 +56,7 @@ class WeatherApiTest {
         val apiKey = "apiKey"
         val units = "imperial"
         val expectedPath =
-            "${baseUrl}data/3.0/onecall" +
+            "${BASE_URL}data/3.0/onecall" +
                     "?lat=$latitude" +
                     "&lon=$longitude" +
                     "&appid=$apiKey" +
@@ -61,15 +74,8 @@ class WeatherApiTest {
 
     @Test
     fun `get weather returns weather response when request is successful`() = runTest {
-        val resourcePath = "assets/mock_get_weather_response.json"
-        val response = this::class.java.classLoader
-            ?.getResourceAsStream(resourcePath)
-            .let { requireNotNull(it) { "Could not find resource file: $resourcePath" } }
-            .bufferedReader()
-            .use { it.readText() }
-        val mockResponse = MockResponse().setBody(response)
+        val mockResponse = MockResponse().setBody(json)
         server.enqueue(mockResponse)
-        val expected = WeatherResponseSample.build().right()
 
         val actual = weatherApi.getWeather(0.0, 0.0, "", "")
 
@@ -77,8 +83,31 @@ class WeatherApiTest {
     }
 
     @Test
-    fun `get weather returns call error when request fails`() = runTest {
+    fun `get weather returns weather response with slow network`() = runTest {
+        val mockResponse = MockResponse().apply {
+            setBody(json)
+            throttleBody(1024, 1, TimeUnit.SECONDS);
+        }
+        server.enqueue(mockResponse)
+
+        val actual = weatherApi.getWeather(0.0, 0.0, "", "")
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `get weather returns call error when server returns 400`() = runTest {
         val mockResponse = MockResponse().setResponseCode(400)
+        server.enqueue(mockResponse)
+
+        val response = weatherApi.getWeather(0.0, 0.0, "", "")
+
+        assertTrue(response.isLeft())
+    }
+
+    @Test
+    fun `get weather returns call error when server returns 500`() = runTest {
+        val mockResponse = MockResponse().setResponseCode(500)
         server.enqueue(mockResponse)
 
         val response = weatherApi.getWeather(0.0, 0.0, "", "")
