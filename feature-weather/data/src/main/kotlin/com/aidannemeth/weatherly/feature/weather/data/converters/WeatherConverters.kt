@@ -5,10 +5,10 @@ import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 
 class WeatherConverters {
     @TypeConverter
-    fun fromDoubleToTemperature(value: Double): Temperature =
+    fun fromFloatToTemperature(value: Float): Temperature =
         Temperature(value)
 
     @TypeConverter
-    fun fromTemperatureToDouble(temperature: Temperature): Double =
+    fun fromTemperatureToFloat(temperature: Temperature): Float =
         temperature.value
 }

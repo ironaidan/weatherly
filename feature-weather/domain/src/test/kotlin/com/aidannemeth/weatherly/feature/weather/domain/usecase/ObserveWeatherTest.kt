@@ -18,7 +18,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 class ObserveWeatherTest {
-    private val weather = Weather(Temperature(0.00))
+    private val weather = Weather(Temperature(0.00f))
 
     private val weatherRepository = mockk<WeatherRepository>()
 

@@ -36,7 +36,7 @@ class WeatherDaoTest {
     @Test
     @Throws(Exception::class)
     fun `observe returns weather when existing in db`() = runTest {
-        val expected = WeatherEntity(0, Temperature(0.0))
+        val expected = WeatherEntity(0, Temperature(0.0f))
 
         weatherDao.insert(expected)
         val actual = weatherDao.observe().first()

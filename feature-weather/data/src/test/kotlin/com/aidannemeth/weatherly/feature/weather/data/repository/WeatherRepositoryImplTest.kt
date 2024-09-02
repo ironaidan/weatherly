@@ -19,7 +19,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 class WeatherRepositoryImplTest {
-    private val weather = Weather(Temperature(0.00))
+    private val weather = Weather(Temperature(0.00f))
 
     private val weatherLocalDataSource = mockk<WeatherLocalDataSource>()
 

@@ -1,14 +1,14 @@
 package com.aidannemeth.weatherly.feature.weather.data.sample
 
+import com.aidannemeth.weatherly.feature.weather.data.remote.resource.AlertResource
+import com.aidannemeth.weatherly.feature.weather.data.remote.resource.CurrentWeatherResource
+import com.aidannemeth.weatherly.feature.weather.data.remote.resource.DailyWeatherResource
+import com.aidannemeth.weatherly.feature.weather.data.remote.resource.FeelsLikeResource
+import com.aidannemeth.weatherly.feature.weather.data.remote.resource.HourlyWeatherResource
+import com.aidannemeth.weatherly.feature.weather.data.remote.resource.MinutelyWeatherResource
+import com.aidannemeth.weatherly.feature.weather.data.remote.resource.TemperatureResource
+import com.aidannemeth.weatherly.feature.weather.data.remote.resource.WeatherResource
 import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherResponse
-import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherResponse.Alert
-import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherResponse.CurrentWeather
-import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherResponse.CurrentWeather.Weather
-import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherResponse.DailyWeather
-import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherResponse.DailyWeather.FeelsLike
-import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherResponse.DailyWeather.Temperature
-import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherResponse.HourlyWeather
-import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherResponse.MinutelyWeather
 
 object WeatherResponseSample {
     fun build() =
@@ -17,7 +17,7 @@ object WeatherResponseSample {
             longitude = -94.04,
             timezone = "America/Chicago",
             timezoneOffset = -18000,
-            current = CurrentWeather(
+            current = CurrentWeatherResource(
                 dt = 1684929490,
                 sunrise = 1684926645,
                 sunset = 1684977332,
@@ -33,7 +33,7 @@ object WeatherResponseSample {
                 windDirection = 93,
                 windGust = 6.71f,
                 weather = listOf(
-                    Weather(
+                    WeatherResource(
                         id = 803,
                         main = "Clouds",
                         description = "broken clouds",
@@ -42,13 +42,13 @@ object WeatherResponseSample {
                 )
             ),
             minutely = listOf(
-                MinutelyWeather(
+                MinutelyWeatherResource(
                     dt = 1684929540,
                     precipitation = 0
                 )
             ),
             hourly = listOf(
-                HourlyWeather(
+                HourlyWeatherResource(
                     dt = 1684926000,
                     temperature = 292.01f,
                     feelsLike = 292.33f,
@@ -62,7 +62,7 @@ object WeatherResponseSample {
                     windDirection = 86,
                     windGust = 5.88f,
                     weather = listOf(
-                        Weather(
+                        WeatherResource(
                             id = 803,
                             main = "Clouds",
                             description = "broken clouds",
@@ -73,7 +73,7 @@ object WeatherResponseSample {
                 )
             ),
             daily = listOf(
-                DailyWeather(
+                DailyWeatherResource(
                     dt = 1684951200,
                     sunrise = 1684926645,
                     sunset = 1684977332,
@@ -81,7 +81,7 @@ object WeatherResponseSample {
                     moonset = 1684905480,
                     moonPhase = 0.16f,
                     summary = "Expect a day of partly cloudy with rain",
-                    temperature = Temperature(
+                    temperature = TemperatureResource(
                         day = 299.03f,
                         min = 290.69f,
                         max = 300.35f,
@@ -89,7 +89,7 @@ object WeatherResponseSample {
                         eve = 297.51f,
                         morn = 292.55f,
                     ),
-                    feelsLike = FeelsLike(
+                    feelsLike = FeelsLikeResource(
                         day = 299.21f,
                         night = 291.37f,
                         eve = 297.86f,
@@ -102,7 +102,7 @@ object WeatherResponseSample {
                     windDirection = 76,
                     windGust = 8.92f,
                     weather = listOf(
-                        Weather(
+                        WeatherResource(
                             id = 500,
                             main = "Rain",
                             description = "light rain",
@@ -116,7 +116,7 @@ object WeatherResponseSample {
                 )
             ),
             alerts = listOf(
-                Alert(
+                AlertResource(
                     senderName = "NWS Philadelphia - Mount Holly (New Jersey, Delaware, Southeastern Pennsylvania)",
                     event = "Small Craft Advisory",
                     start = 1684952747,
