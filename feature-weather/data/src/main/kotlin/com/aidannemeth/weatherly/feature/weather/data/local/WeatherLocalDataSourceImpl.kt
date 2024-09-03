@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError.Local.NoCachedData
+import com.aidannemeth.weatherly.feature.weather.data.local.mapper.toWeather
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherLocalDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi

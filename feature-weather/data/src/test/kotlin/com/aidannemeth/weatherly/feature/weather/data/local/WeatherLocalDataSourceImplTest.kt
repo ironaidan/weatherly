@@ -6,6 +6,7 @@ import arrow.core.right
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError.Local.NoCachedData
 import com.aidannemeth.weatherly.feature.weather.data.local.dao.WeatherDao
 import com.aidannemeth.weatherly.feature.weather.data.local.entity.WeatherEntity
+import com.aidannemeth.weatherly.feature.weather.data.local.mapper.toWeather
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 import io.mockk.every
 import io.mockk.mockk
