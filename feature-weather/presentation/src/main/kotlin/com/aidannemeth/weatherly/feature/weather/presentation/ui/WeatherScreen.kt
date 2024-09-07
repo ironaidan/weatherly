@@ -31,11 +31,14 @@ fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(
-                    text = state,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.titleLarge,
-                )
+                state?.let { state ->
+                    Text(
+                        text = state.temp.value.toString(),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                }
+
             }
         }
     }

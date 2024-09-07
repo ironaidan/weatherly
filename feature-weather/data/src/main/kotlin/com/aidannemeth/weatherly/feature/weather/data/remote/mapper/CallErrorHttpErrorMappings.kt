@@ -13,18 +13,15 @@ fun toHttpError(callError: CallError) =
         is HttpError -> DataError.Remote.Http(
             networkError = NetworkError.fromHttpCode(callError.code),
             apiErrorInfo = callError.message,
-            isRetryable = false,
         )
 
         is IOError -> DataError.Remote.Http(
             networkError = NetworkError.NoNetwork,
             apiErrorInfo = callError.cause.message,
-            isRetryable = true,
         )
 
         is UnexpectedCallError -> DataError.Remote.Http(
             networkError = NetworkError.Unknown,
             apiErrorInfo = callError.cause.message,
-            isRetryable = false,
         )
     }

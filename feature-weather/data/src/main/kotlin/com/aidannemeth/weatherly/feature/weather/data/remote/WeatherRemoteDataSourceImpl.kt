@@ -15,7 +15,7 @@ class WeatherRemoteDataSourceImpl @Inject constructor(
         weatherApi.getWeather(
             latitude = 34.149956,
             longitude = -118.448891,
-            apiKey = "123456789",
+            apiKey = "abcd",
             units = "imperial"
         )
             .map(::toWeather)

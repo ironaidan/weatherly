@@ -2,8 +2,11 @@ package com.aidannemeth.weatherly.feature.weather.dagger
 
 import com.aidannemeth.weatherly.feature.weather.data.local.WeatherDatabase
 import com.aidannemeth.weatherly.feature.weather.data.local.WeatherLocalDataSourceImpl
+import com.aidannemeth.weatherly.feature.weather.data.remote.WeatherApi
+import com.aidannemeth.weatherly.feature.weather.data.remote.WeatherRemoteDataSourceImpl
 import com.aidannemeth.weatherly.feature.weather.data.repository.WeatherRepositoryImpl
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherLocalDataSource
+import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRemoteDataSource
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
@@ -23,8 +26,16 @@ object WeatherModule {
 
     @Provides
     @Singleton
+    fun provideWeatherRemoteDataSource(
+        api: WeatherApi,
+    ): WeatherRemoteDataSource =
+        WeatherRemoteDataSourceImpl(api)
+
+    @Provides
+    @Singleton
     fun provideWeatherRepository(
         weatherLocalDataSource: WeatherLocalDataSource,
+        weatherRemoteDataSource: WeatherRemoteDataSource,
     ): WeatherRepository =
-        WeatherRepositoryImpl(weatherLocalDataSource)
+        WeatherRepositoryImpl(weatherLocalDataSource, weatherRemoteDataSource)
 }

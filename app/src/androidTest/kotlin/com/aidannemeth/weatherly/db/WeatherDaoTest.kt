@@ -36,7 +36,7 @@ class WeatherDaoTest {
     @Test
     @Throws(Exception::class)
     fun `observe returns weather when existing in db`() = runTest {
-        val expected = WeatherEntity(0, Temperature(0.0f))
+        val expected = WeatherEntity(Temperature(0.0f))
 
         weatherDao.insert(expected)
         val actual = weatherDao.observe().first()
@@ -50,6 +50,19 @@ class WeatherDaoTest {
         val expected = null
 
         val actual = weatherDao.observe().first()
+
+        assertThat(actual, equalTo(expected))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun `db only ever contains one row`() = runTest {
+        val expected = 1
+
+        weatherDao.insert(WeatherEntity(Temperature(0.0f)))
+        weatherDao.insert(WeatherEntity(Temperature(1.0f)))
+        weatherDao.insert(WeatherEntity(Temperature(2.0f)))
+        val actual = weatherDao.count()
 
         assertThat(actual, equalTo(expected))
     }

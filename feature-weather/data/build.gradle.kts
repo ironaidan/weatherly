@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit)
     implementation(libs.room)
+    implementation(libs.store)
     implementation(platform(libs.arrow.bom))
     implementation(projects.featureCommon.domain)
     implementation(projects.featureWeather.domain)

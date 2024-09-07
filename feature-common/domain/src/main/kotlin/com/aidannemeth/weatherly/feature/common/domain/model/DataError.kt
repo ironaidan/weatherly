@@ -18,7 +18,6 @@ sealed interface DataError {
         data class Http(
             val networkError: NetworkError,
             val apiErrorInfo: String? = null,
-            val isRetryable: Boolean = false
         ) : Remote
 
         data object Unknown : Remote

@@ -1,12 +1,15 @@
 package com.aidannemeth.weatherly.feature.weather.data.repository
 
 import app.cash.turbine.test
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import com.aidannemeth.weatherly.feature.common.domain.model.DataError
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError.Local.NoCachedData
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherLocalDataSource
+import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRemoteDataSource
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -23,36 +26,45 @@ class WeatherRepositoryImplTest {
 
     private val weatherLocalDataSource = mockk<WeatherLocalDataSource>()
 
+    private val weatherRemoteDataSource = mockk<WeatherRemoteDataSource>()
+
     private lateinit var weatherRepository: WeatherRepositoryImpl
+
+    private lateinit var expected: Either<DataError.Local, Weather>
+
+    private lateinit var actual: Either<DataError.Local, Weather>
 
     @Before
     fun setup() {
-        weatherRepository = WeatherRepositoryImpl(weatherLocalDataSource)
+        weatherRepository = WeatherRepositoryImpl(
+            weatherLocalDataSource,
+            weatherRemoteDataSource,
+        )
     }
 
     @Test
     fun `get weather returns weather when existing locally`() = runTest {
-        val expected = weather.right()
+        expected = weather.right()
         coEvery { weatherLocalDataSource.getWeather() } returns expected
 
-        val actual = weatherRepository.getLocalWeather()
+        actual = weatherRepository.getLocalWeather()
         assertEquals(expected, actual)
         coVerify { weatherLocalDataSource.getWeather() }
     }
 
     @Test
     fun `get weather returns data error when not existing locally`() = runTest {
-        val expected = NoCachedData.left()
+        expected = NoCachedData.left()
         coEvery { weatherLocalDataSource.getWeather() } returns expected
 
-        val actual = weatherRepository.getLocalWeather()
+        actual = weatherRepository.getLocalWeather()
         assertEquals(expected, actual)
         coVerify { weatherLocalDataSource.getWeather() }
     }
 
     @Test
     fun `observe weather returns weather when existing locally`() = runTest {
-        val expected = weather.right()
+        expected = weather.right()
         every { weatherLocalDataSource.observeWeather() } returns flowOf(expected)
 
         weatherRepository.observeWeather().test {
@@ -64,7 +76,7 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun `observe weather returns data error when not existing locally`() = runTest {
-        val expected = NoCachedData.left()
+        expected = NoCachedData.left()
         every { weatherLocalDataSource.observeWeather() } returns flowOf(expected)
 
         weatherRepository.observeWeather().test {

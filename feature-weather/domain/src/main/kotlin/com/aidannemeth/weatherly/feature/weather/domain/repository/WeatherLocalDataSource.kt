@@ -6,7 +6,7 @@ import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherLocalDataSource {
-    suspend fun getWeather(): Either<DataError.Local, Weather>
+    suspend fun insertWeather(weather: Weather): Either<DataError.Local, Unit>
 
     fun observeWeather(): Flow<Either<DataError.Local, Weather>>
 }

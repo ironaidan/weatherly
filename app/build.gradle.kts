@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.room)
