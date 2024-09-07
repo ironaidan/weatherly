@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.secrets)
     kotlin("kapt")
     kotlin("plugin.serialization")
 }
@@ -36,11 +37,20 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     packaging {
         resources {
             excludes += "META-INF/LICENSE*"
         }
     }
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
 }
 
 dependencies {

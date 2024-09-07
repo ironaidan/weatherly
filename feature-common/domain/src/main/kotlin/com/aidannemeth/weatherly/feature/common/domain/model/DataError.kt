@@ -4,6 +4,8 @@ sealed interface DataError {
 
     sealed interface Local : DataError {
 
+        data object Loading : Local
+
         data object NoCachedData : Local
 
         data object OutOfMemory : Local
@@ -15,11 +17,17 @@ sealed interface DataError {
 
     sealed interface Remote : DataError {
 
+        data object Loading : Remote
+
         data class Http(
             val networkError: NetworkError,
             val apiErrorInfo: String? = null,
         ) : Remote
 
+        data object NoNewData: Remote
+
         data object Unknown : Remote
     }
+
+    data object Unknown : DataError
 }

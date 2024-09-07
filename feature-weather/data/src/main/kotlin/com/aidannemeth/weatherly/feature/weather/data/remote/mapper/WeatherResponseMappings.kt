@@ -4,5 +4,5 @@ import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherRes
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 
-fun toWeather(it: WeatherResponse) =
-    Weather(temp = Temperature(it.current.temperature))
+fun WeatherResponse.toWeather() =
+    Weather(temp = Temperature(current.temperature))

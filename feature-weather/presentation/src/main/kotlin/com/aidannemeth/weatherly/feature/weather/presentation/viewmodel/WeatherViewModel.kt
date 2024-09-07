@@ -20,7 +20,10 @@ class WeatherViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val state: StateFlow<Weather?> = observeWeather()
         .mapLatest { weather ->
-            weather.fold({ null }, { it })
+            weather.fold(
+                ifLeft = { null },
+                ifRight = { it },
+            )
         }
         .stateIn(
             scope = viewModelScope,
