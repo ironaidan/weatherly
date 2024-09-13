@@ -34,6 +34,7 @@ fun StoreReadResponse<Weather>.toEither() = when (this) {
 fun Data<Weather>.responseDataToEither() =
     dataOrNull()?.right() ?: toDataError().left()
 
+// This can be erroneously called on a right
 private fun Data<Weather>.toDataError() = when (origin) {
     Cache,
     SourceOfTruth -> DataError.Local.NoCachedData
@@ -44,11 +45,17 @@ private fun Data<Weather>.toDataError() = when (origin) {
 
 private fun Error.Exception.exceptionToEither() = when (origin) {
     Cache -> TODO()
-    SourceOfTruth -> TODO()
+    SourceOfTruth -> {
+        when (error) {
+            is OutOfMemoryError -> DataError.Local.OutOfMemory.left()
+            else -> DataError.Local.Unknown.left()
+        }
+    }
     is Fetcher -> remoteExceptionToEither()
     StoreReadResponseOrigin.Initial -> TODO()
 }
 
+// This can be called on local exceptions also, which is not ideal.
 @OptIn(ExperimentalSerializationApi::class)
 private fun Error.Exception.remoteExceptionToEither() =
     when (val exception = error) {
@@ -72,8 +79,8 @@ private fun Error.Exception.remoteExceptionToEither() =
 
 fun Loading.loadingToEither() = when (origin) {
     Cache,
-    SourceOfTruth -> DataError.Local.Loading.left()
+    SourceOfTruth -> DataError.Local.Loading
 
-    is Fetcher -> DataError.Remote.Loading.left()
+    is Fetcher -> DataError.Remote.Loading
     StoreReadResponseOrigin.Initial -> TODO()
-}
+}.left()

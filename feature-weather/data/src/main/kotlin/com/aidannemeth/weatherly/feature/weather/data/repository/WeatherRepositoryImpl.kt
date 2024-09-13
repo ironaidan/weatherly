@@ -29,14 +29,10 @@ class WeatherRepositoryImpl @Inject constructor(
 
     private fun buildWeatherStore(): Store<Any, Weather> =
         StoreBuilder.from(
-            fetcher = Fetcher.of {
-                weatherRemoteDataSource.getWeather()
-            },
+            fetcher = Fetcher.of { weatherRemoteDataSource.getWeather() },
             sourceOfTruth = SourceOfTruth.of(
                 reader = { weatherLocalDataSource.observeWeather() },
-                writer = { _, weather ->
-                    weatherLocalDataSource.insertWeather(weather)
-                },
+                writer = { _, weather -> weatherLocalDataSource.insertWeather(weather) },
             )
         ).build()
 }

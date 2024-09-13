@@ -10,16 +10,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WeatherResponse(
-//    @SerialName("lat")
-//    val latitude: Double,
-//    @SerialName("lon")
-//    val longitude: Double,
-//    val timezone: String,
-//    @SerialName("timezone_offset")
-//    val timezoneOffset: Int,
+    @SerialName("lat")
+    val latitude: Double,
+    @SerialName("lon")
+    val longitude: Double,
+    val timezone: String,
+    @SerialName("timezone_offset")
+    val timezoneOffset: Int,
     val current: CurrentWeatherResource,
-//    val minutely: List<MinutelyWeatherResource>,
-//    val hourly: List<HourlyWeatherResource>,
-//    val daily: List<DailyWeatherResource>,
+    val minutely: List<MinutelyWeatherResource>,
+    val hourly: List<HourlyWeatherResource>,
+    val daily: List<DailyWeatherResource>,
 //    val alerts: List<AlertResource>, // not present
 )

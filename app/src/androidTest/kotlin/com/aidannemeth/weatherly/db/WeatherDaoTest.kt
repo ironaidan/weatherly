@@ -4,7 +4,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import com.aidannemeth.weatherly.feature.weather.data.local.dao.WeatherDao
-import com.aidannemeth.weatherly.feature.weather.data.local.entity.WeatherEntity
+import com.aidannemeth.weatherly.feature.weather.data.sample.WeatherEntitySample
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -16,7 +16,10 @@ import java.io.IOException
 
 class WeatherDaoTest {
     private lateinit var weatherDao: WeatherDao
+
     private lateinit var db: AppDatabase
+
+    private val weatherEntity = WeatherEntitySample.build()
 
     @Before
     fun setup() {
@@ -36,7 +39,7 @@ class WeatherDaoTest {
     @Test
     @Throws(Exception::class)
     fun `observe returns weather when existing in db`() = runTest {
-        val expected = WeatherEntity(Temperature(0.0f))
+        val expected = weatherEntity
 
         weatherDao.insert(expected)
         val actual = weatherDao.observe().first()
@@ -59,9 +62,9 @@ class WeatherDaoTest {
     fun `db only ever contains one row`() = runTest {
         val expected = 1
 
-        weatherDao.insert(WeatherEntity(Temperature(0.0f)))
-        weatherDao.insert(WeatherEntity(Temperature(1.0f)))
-        weatherDao.insert(WeatherEntity(Temperature(2.0f)))
+        weatherDao.insert(weatherEntity)
+        weatherDao.insert(weatherEntity.copy(temperature = Temperature(1.0f)))
+        weatherDao.insert(weatherEntity.copy(temperature = Temperature(2.0f)))
         val actual = weatherDao.count()
 
         assertThat(actual, equalTo(expected))

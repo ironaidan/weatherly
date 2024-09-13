@@ -1,12 +1,8 @@
 package com.aidannemeth.weatherly.navigation
 
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.navigation.testing.TestNavHostController
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.compose.ui.test.onNodeWithTag
 import com.aidannemeth.weatherly.MainActivity
-import com.aidannemeth.weatherly.R
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -29,10 +25,8 @@ class NavigationTest {
 
     @Test
     fun `nav host displays weather screen when app starts`() {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-
         composeTestRule
-            .onNodeWithText(context.getString(R.string.app_name))
-            .assertIsDisplayed()
+            .onNodeWithTag("WeatherScreen")
+            .assertExists()
     }
 }

@@ -30,6 +30,6 @@ data class DailyWeatherResource(
     val weather: List<WeatherResource>,
     val clouds: Int,
     val pop: Float,
-//    val rain: Float, not present
+//    val rain: Float, // not present
     val uvi: Float,
 )

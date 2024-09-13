@@ -10,7 +10,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import timber.log.Timber
 
-
 fun buildRetrofit(baseUrl: String, json: Json): Retrofit {
     val logging = HttpLoggingInterceptor { message ->
         Timber.tag("OkHttp").d(message)

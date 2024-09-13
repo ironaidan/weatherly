@@ -32,11 +32,6 @@ sealed interface NetworkError {
     data object Unauthorized : NetworkError
 
     /**
-     * Requested host is not reachable
-     */
-    data object Unreachable : NetworkError
-
-    /**
      * Failed to parse the given response
      */
     data object Parse : NetworkError
@@ -46,16 +41,6 @@ sealed interface NetworkError {
      */
     data object BadRequest : NetworkError
 
-    /**
-     * Request is correct and understood but cannot be processed
-     */
-    data object UnprocessableEntity : NetworkError
-
-    /**
-     * This object is not meant to be actively used.
-     * Its purpose is to notify the logging tool that a case that should be handled
-     * is not and to allow dedicated handling to be put in place.
-     */
     data object Unknown : NetworkError
 
     companion object

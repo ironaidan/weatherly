@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_7_PRO
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,7 +25,11 @@ import com.aidannemeth.weatherly.feature.weather.presentation.viewmodel.WeatherV
 fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("WeatherScreen"),
+    ) { paddingValues ->
         Surface(modifier = Modifier.padding(paddingValues)) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -33,12 +38,11 @@ fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
             ) {
                 state?.let { state ->
                     Text(
-                        text = state.temp.value.toString(),
+                        text = state.temperature.value.toString(),
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.titleLarge,
                     )
                 }
-
             }
         }
     }

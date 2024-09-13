@@ -8,9 +8,9 @@ sealed interface DataError {
 
         data object NoCachedData : Local
 
-        data object OutOfMemory : Local
-
         data object DbWriteFailed : Local
+
+        data object OutOfMemory : Local
 
         data object Unknown : Local
     }
