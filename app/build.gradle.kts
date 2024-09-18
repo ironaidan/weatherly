@@ -95,11 +95,13 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     kapt(libs.room.compiler)
 
+    androidTestImplementation(kotlin("test"))
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.okhttp.mock.webserver)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     kaptAndroidTest(libs.hilt.android.compiler)
     testImplementation(kotlin("test"))

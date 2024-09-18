@@ -28,10 +28,8 @@ class WeatherRemoteDataSourceImplTest {
 
     @Test
     fun `get weather returns weather from network when successful`() = runTest {
+        coEvery { weatherApi.getWeather(any(), any(), any(), any()) } returns weatherResponse
         val expected = weatherResponse.toWeather()
-        coEvery {
-            weatherApi.getWeather(any(), any(), any(), any())
-        } returns weatherResponse
 
         val actual = weatherRemoteDataSource.getWeather()
 
@@ -40,9 +38,7 @@ class WeatherRemoteDataSourceImplTest {
 
     @Test
     fun `get weather throws exception when api throws exception`() = runTest {
-        coEvery {
-            weatherApi.getWeather(any(), any(), any(), any())
-        } throws IOException()
+        coEvery { weatherApi.getWeather(any(), any(), any(), any()) } throws IOException()
 
         assertThrows(IOException::class.java) {
             runBlocking {

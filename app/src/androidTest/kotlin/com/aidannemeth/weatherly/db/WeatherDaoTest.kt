@@ -2,22 +2,21 @@ package com.aidannemeth.weatherly.db
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import com.aidannemeth.weatherly.feature.weather.data.local.dao.WeatherDao
 import com.aidannemeth.weatherly.feature.weather.data.sample.WeatherEntitySample
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
 
 class WeatherDaoTest {
-    private lateinit var weatherDao: WeatherDao
-
     private lateinit var db: AppDatabase
+
+    private lateinit var weatherDao: WeatherDao
 
     private val weatherEntity = WeatherEntitySample.build()
 
@@ -44,7 +43,7 @@ class WeatherDaoTest {
         weatherDao.insert(expected)
         val actual = weatherDao.observe().first()
 
-        assertThat(actual, equalTo(expected))
+        assertEquals(actual, expected)
     }
 
     @Test
@@ -54,7 +53,7 @@ class WeatherDaoTest {
 
         val actual = weatherDao.observe().first()
 
-        assertThat(actual, equalTo(expected))
+        assertEquals(actual, expected)
     }
 
     @Test
@@ -67,6 +66,6 @@ class WeatherDaoTest {
         weatherDao.insert(weatherEntity.copy(temperature = Temperature(2.0f)))
         val actual = weatherDao.count()
 
-        assertThat(actual, equalTo(expected))
+        assertEquals(actual, expected)
     }
 }

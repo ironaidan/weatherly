@@ -1,4 +1,4 @@
-package com.aidannemeth.weatherly.feature.weather.data.sample
+package com.aidannemeth.weatherly.feature.weather.domain.sample
 
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.model.Latitude
