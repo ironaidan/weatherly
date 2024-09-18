@@ -15,7 +15,7 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
 import okio.Buffer
 import okio.ProtocolException
-import org.junit.Assert
+import org.junit.Assert.assertThrows
 import org.junit.Rule
 import retrofit2.HttpException
 import java.util.concurrent.TimeUnit
@@ -24,6 +24,7 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 @HiltAndroidTest
 class WeatherApiTest {
@@ -70,7 +71,7 @@ class WeatherApiTest {
         val apiKey = "apiKey"
         val units = Units.Imperial.name.lowercase()
         val expectedPath =
-            "${baseHttpUrl}data/3.0/onecall" +
+            "/test/data/3.0/onecall" +
                     "?lat=${latitude.value}" +
                     "&lon=${longitude.value}" +
                     "&appid=$apiKey" +
@@ -115,7 +116,7 @@ class WeatherApiTest {
         val mockResponse = MockResponse().setResponseCode(expected)
         server.enqueue(mockResponse)
 
-        val actual = kotlin.test.assertFailsWith<HttpException> {
+        val actual = assertFailsWith<HttpException> {
             weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
         }.code()
 
@@ -128,7 +129,7 @@ class WeatherApiTest {
         val mockResponse = MockResponse().setResponseCode(expected)
         server.enqueue(mockResponse)
 
-        val actual = kotlin.test.assertFailsWith<HttpException> {
+        val actual = assertFailsWith<HttpException> {
             weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
         }.code()
 
@@ -144,7 +145,7 @@ class WeatherApiTest {
         }
         server.enqueue(mockResponse)
 
-        Assert.assertThrows(ProtocolException::class.java) {
+        assertThrows(ProtocolException::class.java) {
             runBlocking {
                 weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
             }

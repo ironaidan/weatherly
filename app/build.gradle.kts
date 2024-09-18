@@ -107,6 +107,5 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)
-    testImplementation(libs.okhttp.mock.webserver)
     testImplementation(libs.room.testing)
 }
