@@ -9,7 +9,6 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import okhttp3.HttpUrl
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
@@ -36,9 +35,6 @@ class WeatherApiTest {
 
     @Inject
     lateinit var weatherApi: WeatherApi
-
-    @Inject
-    lateinit var baseHttpUrl: HttpUrl
 
     private val resourcePath = "assets/mock_get_weather_response.json"
 

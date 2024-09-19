@@ -11,8 +11,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 class WeatherRepositoryImplTest {
     private val weather = WeatherSample.build()
@@ -27,7 +27,7 @@ class WeatherRepositoryImplTest {
 
     private lateinit var weatherRepository: WeatherRepositoryImpl
 
-    @Before
+    @BeforeTest
     fun setup() {
         weatherRepository = WeatherRepositoryImpl(
             weatherLocalDataSource,

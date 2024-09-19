@@ -103,6 +103,7 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.okhttp.mock.webserver)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.turbine)
     kaptAndroidTest(libs.hilt.android.compiler)
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)

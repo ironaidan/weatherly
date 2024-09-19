@@ -9,8 +9,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class WeatherLocalDataSourceImplTest {
@@ -24,15 +24,15 @@ class WeatherLocalDataSourceImplTest {
 
     private val weatherEntity = WeatherEntitySample.build()
 
-    @Before
+    @BeforeTest
     fun setup() {
         weatherLocalDataSource = WeatherLocalDataSourceImpl(db)
     }
 
     @Test
     fun `observe weather returns weather when existing in db`() = runTest {
-        every { weatherDao.observe() } returns flowOf(weatherEntity)
         val expected = weatherEntity.toWeather()
+        every { weatherDao.observe() } returns flowOf(weatherEntity)
 
         weatherLocalDataSource.observeWeather().test {
             assertEquals(expected, awaitItem())
@@ -43,8 +43,8 @@ class WeatherLocalDataSourceImplTest {
 
     @Test
     fun `observe weather returns null when not existing in db`() = runTest {
-        every { weatherDao.observe() } returns flowOf(null)
         val expected = null
+        every { weatherDao.observe() } returns flowOf(null)
 
         weatherLocalDataSource.observeWeather().test {
             assertEquals(expected, awaitItem())
@@ -55,10 +55,10 @@ class WeatherLocalDataSourceImplTest {
 
     @Test
     fun `observe weather emits weather and observes updates`() = runTest {
-        val expectedFlow = flowOf(null, weatherEntity)
-        every { weatherDao.observe() } returns expectedFlow
         val firstExpected = null
         val secondExpected = weatherEntity.toWeather()
+        val expectedFlow = flowOf(null, weatherEntity)
+        every { weatherDao.observe() } returns expectedFlow
 
         weatherLocalDataSource.observeWeather().test {
             assertEquals(firstExpected, awaitItem())

@@ -14,5 +14,6 @@ import okhttp3.mockwebserver.MockWebServer
 )
 object NetworkConfigTestModule {
     @Provides
-    fun provideBaseHttpUrl(mockWebServer: MockWebServer): HttpUrl = mockWebServer.url("/test/")
+    fun provideBaseHttpUrl(mockWebServer: MockWebServer): HttpUrl =
+        mockWebServer.url("/test/")
 }

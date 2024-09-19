@@ -69,6 +69,7 @@ dependencies {
     implementation(projects.featureWeather.domain)
     kapt(libs.hilt.android.compiler)
 
+    androidTestImplementation(kotlin("test"))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.mockk.android)

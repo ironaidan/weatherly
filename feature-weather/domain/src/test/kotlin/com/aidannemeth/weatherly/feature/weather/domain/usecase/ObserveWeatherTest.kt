@@ -15,8 +15,8 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ObserveWeatherTest {
@@ -30,7 +30,7 @@ class ObserveWeatherTest {
 
     private lateinit var expected: Either<DataError.Local, Weather>
 
-    @Before
+    @BeforeTest
     fun setup() {
         observeWeather = ObserveWeather(dispatcher, weatherRepository)
     }

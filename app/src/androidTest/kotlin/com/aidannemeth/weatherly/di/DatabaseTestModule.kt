@@ -7,16 +7,17 @@ import com.aidannemeth.weatherly.feature.weather.data.local.WeatherDatabase
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dagger.hilt.testing.TestInstallIn
 import javax.inject.Singleton
 
-internal const val DATABASE_NAME = "db-weatherly"
-
 @Module
-@InstallIn(SingletonComponent::class)
-interface DatabaseModule {
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces = [DatabaseModule::class]
+)
+interface DatabaseTestModule {
     @Binds
     fun provideWeatherDatabase(appDatabase: AppDatabase): WeatherDatabase
 
@@ -24,10 +25,9 @@ interface DatabaseModule {
         @Provides
         @Singleton
         fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
-            Room.databaseBuilder(
-                context = context,
-                klass = AppDatabase::class.java,
-                name = DATABASE_NAME,
+            Room.inMemoryDatabaseBuilder(
+                context,
+                AppDatabase::class.java,
             ).build()
     }
 }

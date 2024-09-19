@@ -1,42 +1,43 @@
 package com.aidannemeth.weatherly.db
 
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import com.aidannemeth.weatherly.feature.weather.data.local.dao.WeatherDao
 import com.aidannemeth.weatherly.feature.weather.data.sample.WeatherEntitySample
 import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
-import java.io.IOException
+import org.junit.Rule
+import javax.inject.Inject
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
+@HiltAndroidTest
 class WeatherDaoTest {
-    private lateinit var db: AppDatabase
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    lateinit var db: AppDatabase
 
     private lateinit var weatherDao: WeatherDao
 
     private val weatherEntity = WeatherEntitySample.build()
 
-    @Before
+    @BeforeTest
     fun setup() {
-        db = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            AppDatabase::class.java,
-        ).build()
+        hiltRule.inject()
         weatherDao = db.weatherDao()
     }
 
-    @After
-    @Throws(IOException::class)
+    @AfterTest
     fun teardown() {
         db.close()
     }
 
     @Test
-    @Throws(Exception::class)
     fun `observe returns weather when existing in db`() = runTest {
         val expected = weatherEntity
 
@@ -47,7 +48,6 @@ class WeatherDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun `observe returns null when weather not existing in db`() = runTest {
         val expected = null
 
@@ -57,7 +57,6 @@ class WeatherDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun `db only ever contains one row`() = runTest {
         val expected = 1
 
