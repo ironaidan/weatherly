@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import com.aidannemeth.weatherly.db.AppDatabase
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError
+import com.aidannemeth.weatherly.feature.common.domain.model.NetworkError
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherLocalDataSource
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRepository
 import com.aidannemeth.weatherly.feature.weather.domain.sample.WeatherSample
@@ -13,7 +14,10 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.SocketPolicy
+import okio.Buffer
 import org.junit.Rule
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -87,6 +91,171 @@ class WeatherRepositoryImplTest {
             assertEquals(firstExpected, awaitItem())
             assertEquals(secondExpected, awaitItem())
             assertEquals(thirdExpected, awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun observeWeatherReturnsNetworkWhenNoCacheWithSlowNetwork() = runTest {
+        val firstExpected = DataError.Remote.Loading.left()
+        val secondExpected = weather.right()
+        val mockResponse = MockResponse().apply {
+            setBody(json)
+            throttleBody(1024, 1, TimeUnit.SECONDS);
+        }
+        server.enqueue(mockResponse)
+
+        weatherRepository.observeWeather().test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun observeWeatherReturnsBadRequestWhenServerReturns400() = runTest {
+        val firstExpected = DataError.Remote.Loading.left()
+        val secondExpected = DataError.Remote.Http(
+            networkError = NetworkError.BadRequest,
+            apiErrorInfo = "HTTP 400 Client Error",
+        ).left()
+        val mockResponse = MockResponse().setResponseCode(400)
+        server.enqueue(mockResponse)
+
+        weatherRepository.observeWeather().test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun observeWeatherReturnsUnauthorizedWhenServerReturns401() = runTest {
+        val firstExpected = DataError.Remote.Loading.left()
+        val secondExpected = DataError.Remote.Http(
+            networkError = NetworkError.Unauthorized,
+            apiErrorInfo = "HTTP 401 Client Error",
+        ).left()
+        val mockResponse = MockResponse().setResponseCode(401)
+        server.enqueue(mockResponse)
+
+        weatherRepository.observeWeather().test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun observeWeatherReturnsForbiddenWhenServerReturns403() = runTest {
+        val firstExpected = DataError.Remote.Loading.left()
+        val secondExpected = DataError.Remote.Http(
+            networkError = NetworkError.Forbidden,
+            apiErrorInfo = "HTTP 403 Client Error",
+        ).left()
+        val mockResponse = MockResponse().setResponseCode(403)
+        server.enqueue(mockResponse)
+
+        weatherRepository.observeWeather().test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun observeWeatherReturnsNotFoundWhenServerReturns404() = runTest {
+        val firstExpected = DataError.Remote.Loading.left()
+        val secondExpected = DataError.Remote.Http(
+            networkError = NetworkError.NotFound,
+            apiErrorInfo = "HTTP 404 Client Error",
+        ).left()
+        val mockResponse = MockResponse().setResponseCode(404)
+        server.enqueue(mockResponse)
+
+        weatherRepository.observeWeather().test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun observeWeatherReturnsServerErrorWhenServerReturns500() = runTest {
+        val firstExpected = DataError.Remote.Loading.left()
+        val secondExpected = DataError.Remote.Http(
+            networkError = NetworkError.ServerError,
+            apiErrorInfo = "HTTP 500 Server Error",
+        ).left()
+        val mockResponse = MockResponse().setResponseCode(500)
+        server.enqueue(mockResponse)
+
+        weatherRepository.observeWeather().test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun observeWeatherReturnsUnknownWhenServerReturnsUnmappedError() = runTest {
+        val firstExpected = DataError.Remote.Loading.left()
+        val secondExpected = DataError.Remote.Http(
+            networkError = NetworkError.Unknown,
+            apiErrorInfo = "HTTP 418 Client Error",
+        ).left()
+        val mockResponse = MockResponse().setResponseCode(418)
+        server.enqueue(mockResponse)
+
+        weatherRepository.observeWeather().test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun observeWeatherReturnsNoNetworkWhenRequestIsDisconnected() = runTest {
+        val firstExpected = DataError.Remote.Loading.left()
+        val secondExpected = DataError.Remote.Http(
+            networkError = NetworkError.NoNetwork,
+            apiErrorInfo = "unexpected end of stream",
+        ).left()
+        val byteArrayStub = ByteArray(1024)
+        val mockResponse = MockResponse().apply {
+            setBody(Buffer().write(byteArrayStub))
+            setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+        }
+        server.enqueue(mockResponse)
+
+        weatherRepository.observeWeather().test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun observeWeatherReturnsNoNetworkWhenRequestIsDisconnectede() = runTest {
+        val resourcePath = "assets/mock_malformed_get_weather_response.json"
+        val json = this::class.java.classLoader
+            ?.getResourceAsStream(resourcePath)
+            .let { requireNotNull(it) { "Could not find resource file: $resourcePath" } }
+            .bufferedReader()
+            .use { it.readText() }
+        val firstExpected = DataError.Remote.Loading.left()
+        val secondExpected = DataError.Remote.Http(
+            networkError = NetworkError.Parse,
+            apiErrorInfo = "Field 'lat' is required for type with serial name 'com.aidannemeth." +
+                    "weatherly.feature.weather.data.remote.response.WeatherResponse', but it was" +
+                    " missing at path: \$",
+        ).left()
+        val mockResponse = MockResponse().setBody(json)
+        server.enqueue(mockResponse)
+
+        weatherRepository.observeWeather().test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
             cancel()
         }
     }

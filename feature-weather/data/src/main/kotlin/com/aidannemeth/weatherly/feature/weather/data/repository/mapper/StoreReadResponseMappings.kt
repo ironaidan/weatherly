@@ -19,6 +19,8 @@ import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin.Cache
 import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin.Fetcher
 import org.mobilenativefoundation.store.store5.StoreReadResponseOrigin.SourceOfTruth
 import retrofit2.HttpException
+import java.net.ProtocolException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 fun StoreReadResponse<Weather>.toEither() = when (this) {
@@ -71,6 +73,13 @@ private fun Error.Exception.remoteExceptionToEither() =
 
         is MissingFieldException -> DataError.Remote.Http(
             networkError = NetworkError.Parse,
+            apiErrorInfo = exception.message,
+        )
+
+        is ProtocolException,
+        is SocketTimeoutException
+        -> DataError.Remote.Http(
+            networkError = NetworkError.NoNetwork,
             apiErrorInfo = exception.message,
         )
 
