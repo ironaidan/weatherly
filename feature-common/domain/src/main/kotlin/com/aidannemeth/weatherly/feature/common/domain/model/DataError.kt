@@ -4,8 +4,6 @@ sealed interface DataError {
 
     sealed interface Local : DataError {
 
-        data object Loading : Local
-
         data object NoCachedData : Local
 
         data object DbWriteFailed : Local
@@ -16,8 +14,6 @@ sealed interface DataError {
     }
 
     sealed interface Remote : DataError {
-
-        data object Loading : Remote
 
         data class Http(
             val networkError: NetworkError,

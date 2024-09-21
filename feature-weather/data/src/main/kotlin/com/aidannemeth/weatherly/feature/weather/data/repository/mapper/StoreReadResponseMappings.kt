@@ -1,11 +1,15 @@
 package com.aidannemeth.weatherly.feature.weather.data.repository.mapper
 
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.aidannemeth.weatherly.feature.common.domain.mapper.fromHttpCode
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError
 import com.aidannemeth.weatherly.feature.common.domain.model.NetworkError
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.MissingFieldException
 import org.mobilenativefoundation.store.store5.StoreReadResponse
@@ -23,20 +27,23 @@ import java.net.ProtocolException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-fun StoreReadResponse<Weather>.toEither() = when (this) {
-    is Data -> responseDataToEither()
-    is Error.Custom<*> -> TODO()
-    is Error.Exception -> exceptionToEither()
-    is Error.Message -> TODO()
-    Initial -> TODO()
-    is Loading -> loadingToEither()
-    is NoNewData -> TODO()
+@OptIn(ExperimentalCoroutinesApi::class)
+fun Flow<StoreReadResponse<Weather>>.mapToEither(): Flow<Either<DataError, Weather>> =
+    transformLatest { response ->
+        when (response) {
+            is Data -> emit(response.responseDataToEither())
+            is Error.Custom<*> -> TODO()
+            is Error.Exception -> emit(response.exceptionToEither())
+            is Error.Message -> TODO()
+            Initial -> TODO()
+            is Loading -> Unit
+            is NoNewData -> TODO()
+        }
 }
 
 fun Data<Weather>.responseDataToEither() =
     dataOrNull()?.right() ?: toDataError().left()
 
-// This can be erroneously called on a right
 private fun Data<Weather>.toDataError() = when (origin) {
     Cache,
     SourceOfTruth -> DataError.Local.NoCachedData
@@ -57,7 +64,6 @@ private fun Error.Exception.exceptionToEither() = when (origin) {
     StoreReadResponseOrigin.Initial -> TODO()
 }
 
-// This can be called on local exceptions also, which is not ideal.
 @OptIn(ExperimentalSerializationApi::class)
 private fun Error.Exception.remoteExceptionToEither() =
     when (val exception = error) {
@@ -85,11 +91,3 @@ private fun Error.Exception.remoteExceptionToEither() =
 
         else -> TODO()
     }.left()
-
-fun Loading.loadingToEither() = when (origin) {
-    Cache,
-    SourceOfTruth -> DataError.Local.Loading
-
-    is Fetcher -> DataError.Remote.Loading
-    StoreReadResponseOrigin.Initial -> TODO()
-}.left()
