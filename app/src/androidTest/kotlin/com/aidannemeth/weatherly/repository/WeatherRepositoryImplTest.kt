@@ -236,7 +236,7 @@ class WeatherRepositoryImplTest {
     }
 
     @Test
-    fun observeWeatherReturnsNoNetworkWhenRequestIsDisconnectede() = runTest {
+    fun observeWeatherReturnsParseWhenRequestIsMalformed() = runTest {
         val resourcePath = "assets/mock_malformed_get_weather_response.json"
         val json = this::class.java.classLoader
             ?.getResourceAsStream(resourcePath)

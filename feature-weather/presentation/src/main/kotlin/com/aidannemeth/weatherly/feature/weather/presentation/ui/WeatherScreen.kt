@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -19,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aidannemeth.weatherly.feature.common.presentation.theme.WeatherlyTheme
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherState
 import com.aidannemeth.weatherly.feature.weather.presentation.viewmodel.WeatherViewModel
 
 @Composable
@@ -36,15 +38,27 @@ fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                state?.let { state ->
-                    Text(
-                        text = state.temperature.value.toString(),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                }
+                WeatherScreenContent(state)
             }
         }
+    }
+}
+
+@Composable
+private fun WeatherScreenContent(state: WeatherState) {
+    when (state) {
+        is WeatherState.Data -> Text(
+            text = state.weatherUiModel.temperature,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.titleLarge,
+        )
+
+        is WeatherState.Error -> Text(
+            text = state.message,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.titleLarge,
+        )
+        WeatherState.Loading -> CircularProgressIndicator()
     }
 }
 

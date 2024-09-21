@@ -15,6 +15,7 @@ import org.mobilenativefoundation.store.store5.SourceOfTruth
 import org.mobilenativefoundation.store.store5.Store
 import org.mobilenativefoundation.store.store5.StoreBuilder
 import org.mobilenativefoundation.store.store5.StoreReadRequest
+import org.mobilenativefoundation.store.store5.StoreReadResponse
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
@@ -25,7 +26,7 @@ class WeatherRepositoryImpl @Inject constructor(
     override fun observeWeather(): Flow<Either<DataError, Weather>> =
         buildWeatherStore()
             .stream(StoreReadRequest.cached(key = Unit, refresh = true))
-            .mapLatest { response -> response.toEither() }
+            .mapLatest(StoreReadResponse<Weather>::toEither)
 
     private fun buildWeatherStore(): Store<Any, Weather> =
         StoreBuilder.from(
