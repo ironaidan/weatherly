@@ -7,9 +7,9 @@ import com.aidannemeth.weatherly.feature.common.domain.model.DataError
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.usecase.ObserveWeather
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherEvent
-import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherState
-import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherUiModel
-import com.aidannemeth.weatherly.feature.weather.presentation.reducer.WeatherReducer
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.reducer.WeatherMetadataReducer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,13 +24,13 @@ import javax.inject.Inject
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     private val observeWeather: ObserveWeather,
-    private val reducer: WeatherReducer,
+    private val reducer: WeatherMetadataReducer,
 ) : ViewModel() {
 
-    private val mutableState: MutableStateFlow<WeatherState> =
-        MutableStateFlow(WeatherState.Loading)
+    private val mutableState: MutableStateFlow<WeatherMetadataState> =
+        MutableStateFlow(WeatherMetadataState.Loading)
 
-    val state: StateFlow<WeatherState> = mutableState.asStateFlow()
+    val state: StateFlow<WeatherMetadataState> = mutableState.asStateFlow()
 
     init {
         observeWeatherMetadata()
@@ -40,7 +40,7 @@ class WeatherViewModel @Inject constructor(
     private fun observeWeatherMetadata() {
         observeWeather()
             .mapLatest(::toWeatherEvent)
-            .onEach(::updateState)
+            .onEach(::dispatchEvent)
             .launchIn(viewModelScope)
     }
 
@@ -49,15 +49,15 @@ class WeatherViewModel @Inject constructor(
             ifLeft = { WeatherEvent.ErrorLoadingWeather },
             ifRight = {
                 WeatherEvent.WeatherData(
-                    WeatherUiModel(
-                        temperature = it.temperature.value.toString(),
+                    WeatherMetadataUiModel(
+                        temperature = it.temperature.value.toInt().toString(),
                     )
                 )
             },
         )
     }
 
-    private fun updateState(weatherEvent: WeatherEvent) {
+    private fun dispatchEvent(weatherEvent: WeatherEvent) {
         mutableState.update { currentState ->
             reducer.dispatch(weatherEvent, currentState)
         }

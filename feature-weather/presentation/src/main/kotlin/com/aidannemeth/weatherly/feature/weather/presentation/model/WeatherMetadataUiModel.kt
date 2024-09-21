@@ -1,5 +1,5 @@
 package com.aidannemeth.weatherly.feature.weather.presentation.model
 
-data class WeatherUiModel(
+data class WeatherMetadataUiModel(
     val temperature: String,
 )
