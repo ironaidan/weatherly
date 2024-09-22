@@ -8,7 +8,7 @@ import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.usecase.ObserveWeather
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherEvent
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
-import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherUiModel
 import com.aidannemeth.weatherly.feature.weather.presentation.reducer.WeatherMetadataReducer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -49,7 +49,7 @@ class WeatherViewModel @Inject constructor(
             ifLeft = { WeatherEvent.ErrorLoadingWeather },
             ifRight = {
                 WeatherEvent.WeatherData(
-                    WeatherMetadataUiModel(
+                    WeatherUiModel(
                         temperature = it.temperature.value.toInt().toString(),
                     )
                 )

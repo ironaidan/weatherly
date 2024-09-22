@@ -31,7 +31,7 @@ import java.net.UnknownHostException
 fun Flow<StoreReadResponse<Weather>>.mapToEither(): Flow<Either<DataError, Weather>> =
     transformLatest { response ->
         when (response) {
-            is Data -> emit(response.responseDataToEither())
+            is Data -> emit(response.dataToEither())
             is Error.Custom<*> -> TODO()
             is Error.Exception -> emit(response.exceptionToEither())
             is Error.Message -> TODO()
@@ -41,7 +41,7 @@ fun Flow<StoreReadResponse<Weather>>.mapToEither(): Flow<Either<DataError, Weath
         }
 }
 
-fun Data<Weather>.responseDataToEither() =
+fun Data<Weather>.dataToEither() =
     dataOrNull()?.right() ?: toDataError().left()
 
 private fun Data<Weather>.toDataError() = when (origin) {
@@ -54,15 +54,16 @@ private fun Data<Weather>.toDataError() = when (origin) {
 
 private fun Error.Exception.exceptionToEither() = when (origin) {
     Cache -> TODO()
-    SourceOfTruth -> {
-        when (error) {
-            is OutOfMemoryError -> DataError.Local.OutOfMemory.left()
-            else -> DataError.Local.Unknown.left()
-        }
-    }
+    SourceOfTruth -> localExceptionToEither()
     is Fetcher -> remoteExceptionToEither()
     StoreReadResponseOrigin.Initial -> TODO()
 }
+
+private fun Error.Exception.localExceptionToEither() =
+    when (error) {
+        is OutOfMemoryError -> DataError.Local.OutOfMemory
+        else -> DataError.Local.Unknown
+    }.left()
 
 @OptIn(ExperimentalSerializationApi::class)
 private fun Error.Exception.remoteExceptionToEither() =

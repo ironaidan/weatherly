@@ -21,7 +21,7 @@ class WeatherMetadataReducer @Inject constructor() {
         is WeatherMetadataState.Data -> this
         is WeatherMetadataState.Loading,
         is WeatherMetadataState.Error -> WeatherMetadataState.Error(
-            message = "Error loading weather"
+            message = "Error loading weather",
         )
     }
 }

@@ -28,7 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aidannemeth.weatherly.feature.common.presentation.theme.WeatherlyTheme
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
-import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherUiModel
 import com.aidannemeth.weatherly.feature.weather.presentation.viewmodel.WeatherViewModel
 
 @Composable
@@ -91,7 +91,7 @@ fun WeatherScreenPreview() {
     WeatherlyTheme {
         WeatherScreen(
             state = WeatherMetadataState.Data(
-                weatherUiModel = WeatherMetadataUiModel(
+                weatherUiModel = WeatherUiModel(
                     temperature = "100",
                 )
             ),
