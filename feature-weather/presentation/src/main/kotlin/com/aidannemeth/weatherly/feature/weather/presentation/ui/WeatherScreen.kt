@@ -30,6 +30,7 @@ import com.aidannemeth.weatherly.feature.common.presentation.theme.WeatherlyThem
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherUiModel
 import com.aidannemeth.weatherly.feature.weather.presentation.viewmodel.WeatherViewModel
+import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 fun WeatherScreenContainer(viewModel: WeatherViewModel = hiltViewModel()) {
@@ -37,8 +38,9 @@ fun WeatherScreenContainer(viewModel: WeatherViewModel = hiltViewModel()) {
     WeatherScreen(state)
 }
 
+@VisibleForTesting
 @Composable
-private fun WeatherScreen(state: WeatherMetadataState) {
+internal fun WeatherScreen(state: WeatherMetadataState) {
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         modifier = Modifier
@@ -60,6 +62,7 @@ private fun WeatherScreen(state: WeatherMetadataState) {
                 ) { targetState ->
                     when (targetState) {
                         WeatherMetadataState.Loading -> CircularProgressIndicator(
+                            modifier = Modifier.testTag("LoadingIndicator"),
                             color = MaterialTheme.colorScheme.onSurface,
                         )
 

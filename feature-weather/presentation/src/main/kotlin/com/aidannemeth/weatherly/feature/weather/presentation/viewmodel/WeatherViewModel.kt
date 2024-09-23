@@ -6,9 +6,10 @@ import arrow.core.Either
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.usecase.ObserveWeather
+import com.aidannemeth.weatherly.feature.weather.presentation.mapper.toWeatherUiModel
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherEvent
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
-import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherOperation
 import com.aidannemeth.weatherly.feature.weather.presentation.reducer.WeatherMetadataReducer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,22 +45,16 @@ class WeatherViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun toWeatherEvent(weather: Either<DataError, Weather>): WeatherEvent {
+    private fun toWeatherEvent(weather: Either<DataError, Weather>): WeatherOperation {
         return weather.fold(
             ifLeft = { WeatherEvent.ErrorLoadingWeather },
-            ifRight = {
-                WeatherEvent.WeatherData(
-                    WeatherUiModel(
-                        temperature = it.temperature.value.toInt().toString(),
-                    )
-                )
-            },
+            ifRight = { WeatherEvent.WeatherData(it.toWeatherUiModel()) },
         )
     }
 
-    private fun dispatchEvent(weatherEvent: WeatherEvent) {
+    private fun dispatchEvent(event: WeatherOperation) {
         mutableState.update { currentState ->
-            reducer.dispatch(weatherEvent, currentState)
+            reducer.dispatch(event, currentState)
         }
     }
 }

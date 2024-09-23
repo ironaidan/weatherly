@@ -4,7 +4,7 @@ import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherUiMod
 
 object WeatherUiModelSample {
 
-    fun build() = WeatherUiModel(
-        temperature = "100",
+    fun build(temperature: String = "292") = WeatherUiModel(
+        temperature = temperature,
     )
 }

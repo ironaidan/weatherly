@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.aidannemeth.weatherly.navigation.model.Destination.Screen.Weather
-import com.aidannemeth.weatherly.navigation.route.addWeather
+import com.aidannemeth.weatherly.navigation.route.addWeatherScreen
 
 @Composable
 fun Home() {
@@ -20,7 +20,7 @@ fun Home() {
                 navController = navController,
                 startDestination = Weather,
             ) {
-                addWeather()
+                addWeatherScreen()
             }
         }
     }

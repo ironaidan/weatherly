@@ -43,9 +43,16 @@ android {
     composeOptions {
         libs.versions.kotlinCompilerExtensionVersion
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE*"
+        }
+    }
 }
 
 dependencies {
+    debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.tooling)
     detektPlugins(libs.detekt)
     implementation(libs.androidx.lifecycle.runtime.compose)

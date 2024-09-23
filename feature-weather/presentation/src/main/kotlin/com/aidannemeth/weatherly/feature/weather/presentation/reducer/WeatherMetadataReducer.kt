@@ -7,11 +7,11 @@ import javax.inject.Inject
 
 class WeatherMetadataReducer @Inject constructor() {
     fun dispatch(
-        event: WeatherOperation,
+        operation: WeatherOperation,
         currentState: WeatherMetadataState,
-    ): WeatherMetadataState = when (event) {
+    ): WeatherMetadataState = when (operation) {
         is WeatherEvent.WeatherData -> WeatherMetadataState.Data(
-            weatherUiModel = event.weatherUiModel
+            weatherUiModel = operation.weatherUiModel
         )
 
         WeatherEvent.ErrorLoadingWeather -> currentState.toNewStateForErrorLoading()
