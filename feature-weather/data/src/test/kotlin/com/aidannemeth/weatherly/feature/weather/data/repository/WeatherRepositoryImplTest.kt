@@ -44,4 +44,12 @@ class WeatherRepositoryImplTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `refresh weather interacts with all data sources`() = runTest {
+        weatherRepository.refreshWeather()
+        verify { weatherLocalDataSource.observeWeather() }
+        coVerify { weatherLocalDataSource.insertWeather(any()) }
+        coVerify { weatherRemoteDataSource.getWeather() }
+    }
 }

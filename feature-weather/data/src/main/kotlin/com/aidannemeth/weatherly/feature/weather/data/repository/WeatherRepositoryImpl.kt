@@ -3,6 +3,7 @@ package com.aidannemeth.weatherly.feature.weather.data.repository
 import arrow.core.Either
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError
 import com.aidannemeth.weatherly.feature.weather.data.repository.mapper.mapToEither
+import com.aidannemeth.weatherly.feature.weather.data.repository.mapper.toHttpDataError
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherLocalDataSource
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRemoteDataSource
@@ -13,23 +14,39 @@ import org.mobilenativefoundation.store.store5.SourceOfTruth
 import org.mobilenativefoundation.store.store5.Store
 import org.mobilenativefoundation.store.store5.StoreBuilder
 import org.mobilenativefoundation.store.store5.StoreReadRequest
+import org.mobilenativefoundation.store.store5.impl.extensions.fresh
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
     private val weatherLocalDataSource: WeatherLocalDataSource,
     private val weatherRemoteDataSource: WeatherRemoteDataSource,
 ) : WeatherRepository {
-    override fun observeWeather(): Flow<Either<DataError, Weather>> =
-        buildWeatherStore()
-            .stream(StoreReadRequest.cached(key = Unit, refresh = true))
-            .mapToEither()
-
-    private fun buildWeatherStore(): Store<Any, Weather> =
+    private val weatherStore: Store<WeatherKey, Weather> =
         StoreBuilder.from(
-            fetcher = Fetcher.of { weatherRemoteDataSource.getWeather() },
+            fetcher = Fetcher.of { _: WeatherKey ->
+                weatherRemoteDataSource.getWeather()
+            },
             sourceOfTruth = SourceOfTruth.of(
-                reader = { weatherLocalDataSource.observeWeather() },
-                writer = { _, weather -> weatherLocalDataSource.insertWeather(weather) },
+                reader = { _: WeatherKey ->
+                    weatherLocalDataSource.observeWeather()
+                },
+                writer = { _: WeatherKey, weather: Weather ->
+                    weatherLocalDataSource.insertWeather(weather)
+                },
             )
         ).build()
+
+    override fun observeWeather(): Flow<Either<DataError, Weather>> =
+        weatherStore
+            .stream(StoreReadRequest.cached(key = WeatherKey, refresh = true))
+            .mapToEither()
+
+    override suspend fun refreshWeather(): Either<DataError.Remote, Weather> =
+        Either.catch {
+            weatherStore.fresh(WeatherKey)
+        }.mapLeft { exception: Throwable ->
+            exception.toHttpDataError()
+        }
 }
+
+object WeatherKey

@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
     fun observeWeather(): Flow<Either<DataError, Weather>>
+
+    suspend fun refreshWeather(): Either<DataError.Remote, Weather>
 }

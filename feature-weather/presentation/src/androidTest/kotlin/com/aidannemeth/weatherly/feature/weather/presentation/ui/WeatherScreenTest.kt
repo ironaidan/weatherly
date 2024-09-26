@@ -21,6 +21,7 @@ class WeatherScreenTest {
             WeatherlyTheme {
                 WeatherScreen(
                     state = WeatherMetadataState.Loading,
+                    actions = WeatherScreen.Actions.Empty,
                 )
             }
         }
@@ -38,6 +39,7 @@ class WeatherScreenTest {
                             temperature = "100",
                         )
                     ),
+                    actions = WeatherScreen.Actions.Empty,
                 )
             }
         }
@@ -54,6 +56,7 @@ class WeatherScreenTest {
                     state = WeatherMetadataState.Error(
                         "Something went wrong",
                     ),
+                    actions = WeatherScreen.Actions.Empty,
                 )
             }
         }

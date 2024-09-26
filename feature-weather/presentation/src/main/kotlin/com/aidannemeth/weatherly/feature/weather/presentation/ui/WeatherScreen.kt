@@ -20,13 +20,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_7_PRO
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aidannemeth.weatherly.feature.common.presentation.theme.WeatherlyTheme
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherAction
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherUiModel
 import com.aidannemeth.weatherly.feature.weather.presentation.viewmodel.WeatherViewModel
@@ -35,12 +34,20 @@ import org.jetbrains.annotations.VisibleForTesting
 @Composable
 fun WeatherScreenContainer(viewModel: WeatherViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    WeatherScreen(state)
+    WeatherScreen(
+        state = state,
+        actions = WeatherScreen.Actions(
+            refreshWeather = { viewModel.dispatchAction(WeatherAction.RefreshWeather) }
+        )
+    )
 }
 
 @VisibleForTesting
 @Composable
-internal fun WeatherScreen(state: WeatherMetadataState) {
+internal fun WeatherScreen(
+    state: WeatherMetadataState,
+    actions: WeatherScreen.Actions,
+) {
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         modifier = Modifier
@@ -69,8 +76,6 @@ internal fun WeatherScreen(state: WeatherMetadataState) {
                         is WeatherMetadataState.Data -> Text(
                             text = targetState.weatherUiModel.temperature,
                             color = MaterialTheme.colorScheme.onSurface,
-                            fontSize = 160.sp,
-                            fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge,
                         )
 
@@ -87,6 +92,21 @@ internal fun WeatherScreen(state: WeatherMetadataState) {
     }
 }
 
+object WeatherScreen {
+
+    data class Actions(
+        val refreshWeather: () -> Unit,
+    ) {
+
+        companion object {
+
+            val Empty = Actions(
+                refreshWeather = {},
+            )
+        }
+    }
+}
+
 @Preview(device = PIXEL_7_PRO)
 @Preview(uiMode = UI_MODE_NIGHT_YES, device = PIXEL_7_PRO)
 @Composable
@@ -98,6 +118,7 @@ fun WeatherScreenPreview() {
                     temperature = "100",
                 )
             ),
+            actions = WeatherScreen.Actions.Empty,
         )
     }
 }

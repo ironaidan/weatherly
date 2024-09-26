@@ -7,6 +7,7 @@ import com.aidannemeth.weatherly.feature.common.domain.model.DataError
 import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.usecase.ObserveWeather
 import com.aidannemeth.weatherly.feature.weather.presentation.mapper.toWeatherUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherAction
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherEvent
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherOperation
@@ -41,20 +42,26 @@ class WeatherViewModel @Inject constructor(
     private fun observeWeatherMetadata() {
         observeWeather()
             .mapLatest(::toWeatherEvent)
-            .onEach(::dispatchEvent)
+            .onEach(::dispatch)
             .launchIn(viewModelScope)
     }
 
-    private fun toWeatherEvent(weather: Either<DataError, Weather>): WeatherOperation {
+    private fun toWeatherEvent(weather: Either<DataError, Weather>): WeatherEvent {
         return weather.fold(
             ifLeft = { WeatherEvent.ErrorLoadingWeather },
             ifRight = { WeatherEvent.WeatherData(it.toWeatherUiModel()) },
         )
     }
 
-    private fun dispatchEvent(event: WeatherOperation) {
+    private fun dispatch(operation: WeatherOperation) {
         mutableState.update { currentState ->
-            reducer.dispatch(event, currentState)
+            reducer.dispatch(operation, currentState)
+        }
+    }
+
+    internal fun dispatchAction(action: WeatherAction) {
+        when (action) {
+            WeatherAction.RefreshWeather -> {}
         }
     }
 }

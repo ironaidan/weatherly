@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.room)
     implementation(libs.store)
+    implementation(libs.timber)
     implementation(platform(libs.arrow.bom))
     implementation(projects.featureCommon.domain)
     implementation(projects.featureWeather.domain)
