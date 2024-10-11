@@ -7,7 +7,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.aidannemeth.weatherly.feature.common.presentation.theme.WeatherlyTheme
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
-import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherState
 import org.junit.Rule
 import org.junit.Test
 
@@ -20,7 +21,10 @@ class WeatherScreenTest {
         composeTestRule.setContent {
             WeatherlyTheme {
                 WeatherScreen(
-                    state = WeatherMetadataState.Loading,
+                    state = WeatherState(
+                        weatherMetadataState = WeatherMetadataState.Loading,
+                        isRefreshing = false,
+                    ),
                     actions = WeatherScreen.Actions.Empty,
                 )
             }
@@ -34,10 +38,13 @@ class WeatherScreenTest {
         composeTestRule.setContent {
             WeatherlyTheme {
                 WeatherScreen(
-                    state = WeatherMetadataState.Data(
-                        WeatherUiModel(
-                            temperature = "100",
-                        )
+                    state = WeatherState(
+                        weatherMetadataState = WeatherMetadataState.Data(
+                            WeatherMetadataUiModel(
+                                temperature = "100",
+                            )
+                        ),
+                        isRefreshing = false,
                     ),
                     actions = WeatherScreen.Actions.Empty,
                 )
@@ -53,8 +60,9 @@ class WeatherScreenTest {
         composeTestRule.setContent {
             WeatherlyTheme {
                 WeatherScreen(
-                    state = WeatherMetadataState.Error(
-                        "Something went wrong",
+                    state = WeatherState(
+                        weatherMetadataState = WeatherMetadataState.Error("Something went wrong"),
+                        isRefreshing = false,
                     ),
                     actions = WeatherScreen.Actions.Empty,
                 )

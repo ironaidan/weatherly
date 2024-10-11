@@ -8,7 +8,7 @@ internal sealed interface WeatherAction : WeatherOperation {
 
 internal sealed interface WeatherEvent : WeatherOperation {
     data class WeatherData(
-        val payload: WeatherUiModel,
+        val payload: WeatherMetadataUiModel,
     ) : WeatherEvent
 
     data object ErrorLoadingWeather : WeatherEvent

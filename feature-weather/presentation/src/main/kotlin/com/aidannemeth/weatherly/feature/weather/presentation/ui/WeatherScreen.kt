@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -27,7 +28,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.aidannemeth.weatherly.feature.common.presentation.theme.WeatherlyTheme
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherAction
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
-import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherState
 import com.aidannemeth.weatherly.feature.weather.presentation.viewmodel.WeatherViewModel
 import org.jetbrains.annotations.VisibleForTesting
 
@@ -45,7 +47,7 @@ fun WeatherScreenContainer(viewModel: WeatherViewModel = hiltViewModel()) {
 @VisibleForTesting
 @Composable
 internal fun WeatherScreen(
-    state: WeatherMetadataState,
+    state: WeatherState,
     actions: WeatherScreen.Actions,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -64,7 +66,7 @@ internal fun WeatherScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 AnimatedContent(
-                    targetState = state,
+                    targetState = state.weatherMetadataState,
                     label = "weather_screen_content"
                 ) { targetState ->
                     when (targetState) {
@@ -86,6 +88,12 @@ internal fun WeatherScreen(
                                 )
                             }
                     }
+                }
+                Button(
+                    onClick = actions.refreshWeather,
+                    enabled = state.isRefreshing.not(),
+                ) {
+                    Text(text = "Refresh")
                 }
             }
         }
@@ -113,10 +121,13 @@ object WeatherScreen {
 fun WeatherScreenPreview() {
     WeatherlyTheme {
         WeatherScreen(
-            state = WeatherMetadataState.Data(
-                weatherUiModel = WeatherUiModel(
-                    temperature = "100",
-                )
+            state = WeatherState(
+                isRefreshing = false,
+                (WeatherMetadataState.Data(
+                    weatherUiModel = WeatherMetadataUiModel(
+                        temperature = "100℉",
+                    )
+                )),
             ),
             actions = WeatherScreen.Actions.Empty,
         )
