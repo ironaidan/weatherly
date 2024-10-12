@@ -2,8 +2,12 @@ package com.aidannemeth.weatherly.feature.weather.data.local
 
 import app.cash.turbine.test
 import com.aidannemeth.weatherly.feature.weather.data.local.dao.WeatherDao
+import com.aidannemeth.weatherly.feature.weather.data.local.mapper.toEntity
 import com.aidannemeth.weatherly.feature.weather.data.local.mapper.toWeather
 import com.aidannemeth.weatherly.feature.weather.data.sample.WeatherEntitySample
+import com.aidannemeth.weatherly.feature.weather.domain.sample.WeatherSample
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -36,6 +40,7 @@ class WeatherLocalDataSourceImplTest {
 
         weatherLocalDataSource.observeWeather().test {
             assertEquals(expected, awaitItem())
+            coVerify { db.weatherDao() }
             verify { weatherDao.observe() }
             awaitComplete()
         }
@@ -48,6 +53,7 @@ class WeatherLocalDataSourceImplTest {
 
         weatherLocalDataSource.observeWeather().test {
             assertEquals(expected, awaitItem())
+            coVerify { db.weatherDao() }
             verify { weatherDao.observe() }
             awaitComplete()
         }
@@ -63,8 +69,21 @@ class WeatherLocalDataSourceImplTest {
         weatherLocalDataSource.observeWeather().test {
             assertEquals(firstExpected, awaitItem())
             assertEquals(secondExpected, awaitItem())
+            coVerify { db.weatherDao() }
             verify { weatherDao.observe() }
             awaitComplete()
         }
+    }
+
+    @Test
+    fun `insert weather inserts weather into db`() = runTest {
+        val weather = WeatherSample.build()
+        val weatherEntity = weather.toEntity()
+        coEvery { weatherDao.insert(weatherEntity) } returns Unit
+
+        weatherLocalDataSource.insertWeather(weather)
+
+        coVerify { db.weatherDao() }
+        coVerify { weatherDao.insert(weatherEntity) }
     }
 }

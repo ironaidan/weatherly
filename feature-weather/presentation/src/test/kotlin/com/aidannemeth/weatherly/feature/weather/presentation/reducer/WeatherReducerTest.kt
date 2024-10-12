@@ -1,5 +1,6 @@
 package com.aidannemeth.weatherly.feature.weather.presentation.reducer
 
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherAction
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherEvent
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherOperation
@@ -52,6 +53,17 @@ class WeatherReducerTest(
                     isRefreshing = false,
                 ),
             ),
+            TestInput(
+                currentState = WeatherState(
+                    weatherMetadataState = WeatherMetadataState.Loading,
+                    isRefreshing = false,
+                ),
+                operation = WeatherAction.RefreshWeather,
+                expectedState = WeatherState(
+                    weatherMetadataState = WeatherMetadataState.Loading,
+                    isRefreshing = true,
+                ),
+            ),
         )
 
         private val transitionsFromErrorState = listOf(
@@ -70,12 +82,22 @@ class WeatherReducerTest(
                 currentState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
                     isRefreshing = false,
-
                     ),
                 operation = WeatherEvent.ErrorLoadingWeather,
                 expectedState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
                     isRefreshing = false,
+                )
+            ),
+            TestInput(
+                currentState = WeatherState(
+                    weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
+                    isRefreshing = false,
+                    ),
+                operation = WeatherAction.RefreshWeather,
+                expectedState = WeatherState(
+                    weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
+                    isRefreshing = true,
                 )
             ),
         )
@@ -101,6 +123,17 @@ class WeatherReducerTest(
                 expectedState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
                     isRefreshing = false,
+                )
+            ),
+            TestInput(
+                currentState = WeatherState(
+                    weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
+                    isRefreshing = false,
+                ),
+                operation = WeatherAction.RefreshWeather,
+                expectedState = WeatherState(
+                    weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
+                    isRefreshing = true,
                 )
             ),
         )
