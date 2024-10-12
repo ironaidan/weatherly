@@ -32,7 +32,7 @@ fun Throwable.toHttpDataError(): DataError.Remote = when (this) {
     )
 
     else -> {
-        Timber.w("Unknown exception: $message", this)
+        Timber.w("Unknown exception: $message", this.message)
         DataError.Remote.Unknown
     }
 }

@@ -35,20 +35,21 @@ import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 fun WeatherScreenContainer(viewModel: WeatherViewModel = hiltViewModel()) {
+    val actions = WeatherScreen.Actions(
+        refreshWeather = { viewModel.dispatchAction(WeatherAction.RefreshWeather) }
+    )
     val state by viewModel.state.collectAsStateWithLifecycle()
     WeatherScreen(
         state = state,
-        actions = WeatherScreen.Actions(
-            refreshWeather = { viewModel.dispatchAction(WeatherAction.RefreshWeather) }
-        )
+        actions = actions
     )
 }
 
 @VisibleForTesting
 @Composable
 internal fun WeatherScreen(
-    state: WeatherState,
     actions: WeatherScreen.Actions,
+    state: WeatherState,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
@@ -116,20 +117,20 @@ object WeatherScreen {
 }
 
 @Preview(device = PIXEL_7_PRO)
-@Preview(uiMode = UI_MODE_NIGHT_YES, device = PIXEL_7_PRO)
+@Preview(device = PIXEL_7_PRO, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun WeatherScreenPreview() {
     WeatherlyTheme {
         WeatherScreen(
+            actions = WeatherScreen.Actions.Empty,
             state = WeatherState(
                 isRefreshing = false,
-                (WeatherMetadataState.Data(
+                weatherMetadataState = WeatherMetadataState.Data(
                     weatherUiModel = WeatherMetadataUiModel(
                         temperature = "100℉",
                     )
-                )),
+                ),
             ),
-            actions = WeatherScreen.Actions.Empty,
         )
     }
 }
