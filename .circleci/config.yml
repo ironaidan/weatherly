@@ -3,50 +3,77 @@
 
 # For a detailed guide to building and testing on Android, read the docs:
 # https://circleci.com/docs/language-android/ for more details.
-version: 2.1
+#version: 2.1
 
 # Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
 # See: https://circleci.com/docs/orb-intro/
-orbs:
+#orbs:
   # See the Android orb documentation here: https://circleci.com/developer/orbs/orb/circleci/android
+#  android: circleci/android@3.0.0
+
+## Define a job to be invoked later in a workflow.
+## See: https://circleci.com/docs/jobs-steps/#jobs-overview & https://circleci.com/docs/configuration-reference/#jobs
+#jobs:
+#  # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
+#  build-and-test:
+#    # These next lines define the Android machine image executor.
+#    # See: https://circleci.com/docs/executor-intro/ & https://circleci.com/developer/orbs/orb/circleci/android#executors-android-machine
+#    executor:
+#      name: android/android-machine
+#      tag: default
+#
+#    # Add steps to the job
+#    # See: https://circleci.com/docs/jobs-steps/#steps-overview & https://circleci.com/docs/configuration-reference/#steps
+#    steps:
+#      # Checkout the code as the first step.
+#      - checkout
+#
+#      # The next step will run the unit tests
+#      - android/run-tests:
+#          test-command: ./gradlew lint testDebug --continue
+#
+#      # Then start the emulator and run the Instrumentation tests!
+#      - android/start-emulator-and-run-tests:
+#          test-command: ./gradlew connectedDebugAndroidTest
+#          system-image: system-images;android-34;google_apis;x86
+#
+#      # And finally run the release build
+#      - run:
+#          name: Assemble release build
+#          command: |
+#            ./gradlew assembleRelease
+#
+## Orchestrate jobs using workflows
+## See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
+#workflows:
+#  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+#    # Inside the workflow, you define the jobs you want to run.
+#    jobs:
+#      - build-and-test
+
+version: '2.1'
+orbs:
   android: circleci/android@3.0.0
-
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/jobs-steps/#jobs-overview & https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
-  build-and-test:
-    # These next lines define the Android machine image executor.
-    # See: https://circleci.com/docs/executor-intro/ & https://circleci.com/developer/orbs/orb/circleci/android#executors-android-machine
+  test:
     executor:
-      name: android/android-machine
+      name: android/android_machine
+      resource_class: large
       tag: default
-
-    # Add steps to the job
-    # See: https://circleci.com/docs/jobs-steps/#steps-overview & https://circleci.com/docs/configuration-reference/#steps
     steps:
-      # Checkout the code as the first step.
       - checkout
-
-      # The next step will run the unit tests
-      - android/run-tests:
-          test-command: ./gradlew lint testDebug --continue
-
-      # Then start the emulator and run the Instrumentation tests!
-      - android/start-emulator-and-run-tests:
-          test-command: ./gradlew connectedDebugAndroidTest
-          system-image: system-images;android-34;google_apis;x86
-
-      # And finally run the release build
-      - run:
-          name: Assemble release build
-          command: |
-            ./gradlew assembleRelease
-
-# Orchestrate jobs using workflows
-# See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
+      - android/create_avd:
+          avd_name: myavd
+          install: true
+          system_image: system-images;android-31;default;x86_64
+      - android/start_emulator:
+          avd_name: myavd
+          no_window: true
+          restore_gradle_cache_prefix: v1a
+      - android/run_tests
+      - android/save_gradle_cache:
+          cache_prefix: v1a
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  test:
     jobs:
-      - build-and-test
+      - test
