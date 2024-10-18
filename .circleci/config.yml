@@ -62,7 +62,6 @@ jobs:
       tag: 2024.04.1
     steps:
       - checkout
-      - android/restore_gradle_cache
       - android/run_tests:
           test_command: ./gradlew lint testDebug --continue
       - android/start_emulator_and_run_tests:
@@ -75,7 +74,6 @@ jobs:
           when: always
       - store_test_results:
           path: ~/test-results
-      - android/save_gradle_cache
 workflows:
   test:
     jobs:
