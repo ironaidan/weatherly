@@ -8,7 +8,7 @@
 # Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
 # See: https://circleci.com/docs/orb-intro/
 #orbs:
-  # See the Android orb documentation here: https://circleci.com/developer/orbs/orb/circleci/android
+# See the Android orb documentation here: https://circleci.com/developer/orbs/orb/circleci/android
 #  android: circleci/android@3.0.0
 
 ## Define a job to be invoked later in a workflow.
@@ -59,20 +59,14 @@ jobs:
     executor:
       name: android/android_machine
       resource_class: large
-      tag: default
+      tag: 2024.01.1
     steps:
       - checkout
-      - android/create_avd:
-          avd_name: myavd
-          install: true
-          system_image: system-images;android-34;default;x86_64
-      - android/start_emulator:
-          avd_name: myavd
-          no_window: true
-          restore_gradle_cache_prefix: v1a
+      - android/restore_gradle_cache
       - android/run_tests
-      - android/save_gradle_cache:
-          cache_prefix: v1a
+      - android/save_gradle_cache
+#      - android/run_ui_tests:
+#          system_image: system-images;android-34;default;x86_64
 workflows:
   test:
     jobs:
