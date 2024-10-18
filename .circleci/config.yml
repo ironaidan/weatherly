@@ -51,7 +51,7 @@
 #    jobs:
 #      - build-and-test
 
-version: '2.1'
+version: 2.1
 orbs:
   android: circleci/android@3.0.0
 jobs:
@@ -67,6 +67,11 @@ jobs:
           test_command: ./gradlew lint testDebug --continue
       - android/start_emulator_and_run_tests:
           system_image: system-images;android-34;default;x86_64
+      - run:
+          name: Save test results
+          command: mkdir -p ~/test-results/junit/
+#            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+#          when: always
       - store_test_results:
           path: test-results
       - android/save_gradle_cache
