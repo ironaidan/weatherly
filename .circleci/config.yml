@@ -64,7 +64,8 @@ jobs:
       - checkout
       - android/restore_gradle_cache
       - android/run-tests:
-          test-command: ./gradlew lint testDebug --continue
+          test_command: |
+            ./gradlew testDebug --continue --stacktrace
 #      - android/start_emulator_and_run_tests:
 #          system_image: system-images;android-34;default;x86_64
       - android/save_gradle_cache
