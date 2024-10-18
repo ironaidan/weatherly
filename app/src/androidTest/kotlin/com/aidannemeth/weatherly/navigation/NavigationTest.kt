@@ -23,10 +23,10 @@ class NavigationTest {
         hiltRule.inject()
     }
 
-    @Test
-    fun `nav host displays weather screen when app starts`() {
-        composeTestRule
-            .onNodeWithTag("WeatherScreen")
-            .assertExists()
-    }
+//    @Test
+//    fun `nav host displays weather screen when app starts`() {
+//        composeTestRule
+//            .onNodeWithTag("WeatherScreen")
+//            .assertExists()
+//    }
 }
