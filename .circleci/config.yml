@@ -63,8 +63,10 @@ jobs:
     steps:
       - checkout
       - android/restore_gradle_cache
-      - android/start_emulator_and_run_tests:
-          system_image: system-images;android-34;default;x86_64
+      - android/run-tests:
+          test-command: ./gradlew lint testDebug --continue
+#      - android/start_emulator_and_run_tests:
+#          system_image: system-images;android-34;default;x86_64
       - android/save_gradle_cache
 workflows:
   test:
