@@ -64,12 +64,10 @@ class WeatherViewModel @Inject constructor(
 
     internal fun dispatchAction(action: WeatherAction) {
         when (action) {
-            WeatherAction.RefreshWeather -> {
-                viewModelScope.launch {
-                    dispatch(action)
-                    val weatherEvent = refreshWeather().toWeatherEvent()
-                    dispatch(weatherEvent)
-                }
+            WeatherAction.RefreshWeather -> viewModelScope.launch {
+                dispatch(action)
+                val weatherEvent = refreshWeather().toWeatherEvent()
+                dispatch(weatherEvent)
             }
         }
     }

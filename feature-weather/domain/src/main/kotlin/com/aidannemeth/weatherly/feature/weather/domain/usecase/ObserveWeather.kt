@@ -15,6 +15,5 @@ class ObserveWeather @Inject constructor(
     private val weatherRepository: WeatherRepository,
 ) {
     operator fun invoke(): Flow<Either<DataError, Weather>> =
-        weatherRepository.observeWeather()
-            .flowOn(dispatcher)
+        weatherRepository.observeWeather().flowOn(dispatcher)
 }

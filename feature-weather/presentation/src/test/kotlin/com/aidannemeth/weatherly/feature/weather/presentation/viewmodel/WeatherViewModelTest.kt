@@ -1,26 +1,28 @@
 package com.aidannemeth.weatherly.feature.weather.presentation.viewmodel
 
-import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError
 import com.aidannemeth.weatherly.feature.common.domain.model.NetworkError
+import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
+import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
+import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRepository
 import com.aidannemeth.weatherly.feature.weather.domain.sample.WeatherSample
 import com.aidannemeth.weatherly.feature.weather.domain.usecase.ObserveWeather
 import com.aidannemeth.weatherly.feature.weather.domain.usecase.RefreshWeather
 import com.aidannemeth.weatherly.feature.weather.presentation.mapper.toWeatherUiModel
-import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherEvent
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherAction
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherState
 import com.aidannemeth.weatherly.feature.weather.presentation.reducer.WeatherReducer
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -32,15 +34,32 @@ import kotlin.test.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class WeatherViewModelTest {
 
-    private val observeWeather = mockk<ObserveWeather>(relaxed = true)
+    private val weatherRepository = WeatherRepositoryTestFake()
 
-    private val reducer = mockk<WeatherReducer>(relaxed = true)
+    private val observeWeather = ObserveWeather(
+        dispatcher = UnconfinedTestDispatcher(),
+        weatherRepository = weatherRepository,
+    )
 
-    private val refreshWeather = mockk<RefreshWeather>(relaxed = true)
+    private val reducer = WeatherReducer()
+
+    private val refreshWeather = RefreshWeather(
+        dispatcher = UnconfinedTestDispatcher(),
+        weatherRepository = weatherRepository,
+    )
 
     private val viewModel by lazy {
         WeatherViewModel(observeWeather, reducer, refreshWeather)
     }
+
+    private val weather = WeatherSample.build()
+
+    private val weatherUiModel = weather.toWeatherUiModel()
+
+    private val error = DataError.Remote.Http(
+        networkError = NetworkError.NoNetwork,
+        apiErrorInfo = "apiErrorInfo",
+    )
 
     @BeforeTest
     fun setup() {
@@ -54,91 +73,111 @@ class WeatherViewModelTest {
 
     @Test
     fun `initial state is loading`() = runTest {
-        val expected = WeatherState(
-            weatherMetadataState = WeatherMetadataState.Loading,
-            isRefreshing = false,
-        )
+        val expected = WeatherState.Loading
 
         viewModel.state.test {
             assertEquals(expected, awaitItem())
-            verify { observeWeather() }
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
     fun `state is updated with weather data`() = runTest {
-        val weather = WeatherSample.build()
-        val weatherUiModel = weather.toWeatherUiModel()
-        val expected = WeatherState(
+        val firstExpected = WeatherState.Loading
+        val secondExpected = firstExpected.copy(
             weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
-            isRefreshing = false,
         )
-        every { observeWeather() } returns flowOf(weather.right())
-        every {
-            reducer.getState(
-                operation = WeatherEvent.WeatherData(weatherUiModel),
-                currentState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Loading,
-                    isRefreshing = false,
-                ),
-            )
-        } returns expected
 
         viewModel.state.test {
-            ignoreInitialLoadingState()
-            assertEquals(expected, awaitItem())
-            verify {
-                reducer.getState(
-                    operation = WeatherEvent.WeatherData(weatherUiModel),
-                    currentState = WeatherState(
-                        weatherMetadataState = WeatherMetadataState.Loading,
-                        isRefreshing = false,
-                    ),
-                )
-            }
-            cancelAndIgnoreRemainingEvents()
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
         }
     }
 
     @Test
     fun `state is updated with error`() = runTest {
-        val expected = WeatherState(
+        weatherRepository.setObserveWeatherResult(error.left())
+        val firstExpected = WeatherState.Loading
+        val secondExpected = firstExpected.copy(
             weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
-            isRefreshing = false,
         )
-        val error = DataError.Remote.Http(
-            networkError = NetworkError.NoNetwork,
-            apiErrorInfo = "apiErrorInfo",
-        )
-        every { observeWeather() } returns flowOf(error.left())
-        every {
-            reducer.getState(
-                operation = WeatherEvent.ErrorLoadingWeather,
-                currentState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Loading,
-                    isRefreshing = false,
-                ),
-            )
-        } returns expected
 
         viewModel.state.test {
-            ignoreInitialLoadingState()
-            assertEquals(expected, awaitItem())
-            verify {
-                reducer.getState(
-                    operation = WeatherEvent.ErrorLoadingWeather,
-                    currentState = WeatherState(
-                        weatherMetadataState = WeatherMetadataState.Loading,
-                        isRefreshing = false,
-                    ),
-                )
-            }
-            cancelAndIgnoreRemainingEvents()
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
         }
     }
 
-    private suspend fun TurbineTestContext<WeatherState>.ignoreInitialLoadingState() {
-        skipItems(1)
+    @Test
+    fun `state is updated with weather data when refreshed`() = runTest {
+        val refreshedWeather = weather.copy(
+            temperature = Temperature(293.55f)
+        )
+        weatherRepository.setRefreshWeatherResult(refreshedWeather.right())
+        val firstExpected = WeatherState.Loading
+        val secondExpected = firstExpected.copy(
+            weatherMetadataState = WeatherMetadataState.Data(
+                weatherUiModel,
+            ),
+        )
+        val thirdExpected = secondExpected.copy(isRefreshing = true)
+        val fourthExpected = thirdExpected.copy(
+            isRefreshing = false,
+            weatherMetadataState = WeatherMetadataState.Data(
+                refreshedWeather.toWeatherUiModel(),
+            ),
+        )
+
+        viewModel.state.test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
+            viewModel.dispatchAction(WeatherAction.RefreshWeather)
+            assertEquals(thirdExpected, awaitItem())
+            assertEquals(fourthExpected, awaitItem())
+        }
+    }
+
+    @Test
+    fun `state is updated with weather data when refresh fails`() = runTest {
+        weatherRepository.setRefreshWeatherResult(error.left())
+        val firstExpected = WeatherState.Loading
+        val secondExpected = firstExpected.copy(
+            weatherMetadataState = WeatherMetadataState.Data(
+                weatherUiModel,
+            ),
+        )
+        val thirdExpected = secondExpected.copy(isRefreshing = true)
+        val fourthExpected = thirdExpected.copy(isRefreshing = false)
+
+        viewModel.state.test {
+            assertEquals(firstExpected, awaitItem())
+            assertEquals(secondExpected, awaitItem())
+            viewModel.dispatchAction(WeatherAction.RefreshWeather)
+            assertEquals(thirdExpected, awaitItem())
+            assertEquals(fourthExpected, awaitItem())
+        }
+    }
+}
+
+class WeatherRepositoryTestFake : WeatherRepository {
+    private var observeWeatherResult: Either<DataError, Weather> =
+        WeatherSample.build().right()
+
+    private var refreshWeatherResult: Either<DataError.Remote, Weather> =
+        WeatherSample.build().right()
+
+    fun setObserveWeatherResult(result: Either<DataError, Weather>) {
+        observeWeatherResult = result
+    }
+
+    fun setRefreshWeatherResult(result: Either<DataError.Remote, Weather>) {
+        refreshWeatherResult = result
+    }
+
+    override fun observeWeather(): Flow<Either<DataError, Weather>> {
+        return flowOf(observeWeatherResult)
+    }
+
+    override suspend fun refreshWeather(): Either<DataError.Remote, Weather> {
+        return refreshWeatherResult
     }
 }
