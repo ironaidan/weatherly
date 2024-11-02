@@ -12,7 +12,7 @@ import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherState
 import org.junit.Rule
 import org.junit.Test
 
-class WeatherScreenTest {
+class WeatherTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -25,7 +25,7 @@ class WeatherScreenTest {
                         weatherMetadataState = WeatherMetadataState.Loading,
                         isRefreshing = false,
                     ),
-                    actions = WeatherScreen.Actions.Empty,
+                    actions = Weather.Actions.Empty,
                 )
             }
         }
@@ -46,7 +46,7 @@ class WeatherScreenTest {
                         ),
                         isRefreshing = false,
                     ),
-                    actions = WeatherScreen.Actions.Empty,
+                    actions = Weather.Actions.Empty,
                 )
             }
         }
@@ -64,7 +64,7 @@ class WeatherScreenTest {
                         weatherMetadataState = WeatherMetadataState.Error("Something went wrong"),
                         isRefreshing = false,
                     ),
-                    actions = WeatherScreen.Actions.Empty,
+                    actions = Weather.Actions.Empty,
                 )
             }
         }

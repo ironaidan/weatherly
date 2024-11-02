@@ -1,0 +1,27 @@
+version: 2.1
+orbs:
+  android: circleci/android@3.0.0
+jobs:
+  test:
+    executor:
+      name: android/android_machine
+      resource_class: large
+      tag: 2024.04.1
+    steps:
+      - checkout
+      - android/run_tests:
+          test_command: ./gradlew lint testDebug --continue
+      - android/start_emulator_and_run_tests:
+          system_image: system-images;android-34;default;x86_64
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/test-results
+workflows:
+  test:
+    jobs:
+      - test
