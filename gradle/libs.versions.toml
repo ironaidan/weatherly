@@ -1,6 +1,6 @@
 [versions]
 activityCompose = "1.9.1"
-agp = "8.5.2"
+agp = "8.7.2"
 appStartup = "1.1.1"
 arrow = "1.2.4"
 composeBom = "2024.09.02"
