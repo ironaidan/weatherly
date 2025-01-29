@@ -83,14 +83,15 @@ class WeatherApiTest {
         }
 
     @Test
-    fun when_get_weather_called_then_return_weather() = runTest {
-        val mockResponse = MockResponse().setBody(json)
-        server.enqueue(mockResponse)
+    fun when_get_weather_called_then_return_weather() =
+        runTest {
+            val mockResponse = MockResponse().setBody(json)
+            server.enqueue(mockResponse)
 
-        val actual = weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
+            val actual = weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
 
-        assertEquals(expected, actual)
-    }
+            assertEquals(expected, actual)
+        }
 
     @Test
     fun given_slow_network_when_get_weather_called_then_return_weather() =
@@ -107,42 +108,45 @@ class WeatherApiTest {
         }
 
     @Test
-    fun given_400_when_get_weather_called_then_return_http_exception() = runTest {
-        val expected = 400
-        val mockResponse = MockResponse().setResponseCode(expected)
-        server.enqueue(mockResponse)
+    fun given_400_when_get_weather_called_then_return_http_exception() =
+        runTest {
+            val expected = 400
+            val mockResponse = MockResponse().setResponseCode(expected)
+            server.enqueue(mockResponse)
 
-        val actual = assertFailsWith<HttpException> {
-            weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
-        }.code()
+            val actual = assertFailsWith<HttpException> {
+                weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
+            }.code()
 
-        assertEquals(expected, actual)
-    }
+            assertEquals(expected, actual)
+        }
 
     @Test
-    fun given_500_when_get_weather_called_then_return_http_exception() = runTest {
-        val expected = 500
-        val mockResponse = MockResponse().setResponseCode(expected)
-        server.enqueue(mockResponse)
+    fun given_500_when_get_weather_called_then_return_http_exception() =
+        runTest {
+            val expected = 500
+            val mockResponse = MockResponse().setResponseCode(expected)
+            server.enqueue(mockResponse)
 
-        val actual = assertFailsWith<HttpException> {
-            weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
-        }.code()
+            val actual = assertFailsWith<HttpException> {
+                weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
+            }.code()
 
-        assertEquals(expected, actual)
-    }
+            assertEquals(expected, actual)
+        }
 
     @Test
-    fun given_disconnection_when_get_weather_called_then_return_protocol_exception() = runTest {
-        val byteArrayStub = ByteArray(1024)
-        val mockResponse = MockResponse().apply {
-            setBody(Buffer().write(byteArrayStub))
-            setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
-        }
-        server.enqueue(mockResponse)
+    fun given_disconnection_when_get_weather_called_then_return_protocol_exception() =
+        runTest {
+            val byteArrayStub = ByteArray(1024)
+            val mockResponse = MockResponse().apply {
+                setBody(Buffer().write(byteArrayStub))
+                setSocketPolicy(SocketPolicy.DISCONNECT_DURING_RESPONSE_BODY)
+            }
+            server.enqueue(mockResponse)
 
-        assertFailsWith<ProtocolException> {
-            weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
+            assertFailsWith<ProtocolException> {
+                weatherApi.getWeather(Latitude(0.0), Longitude(0.0), "", "")
+            }
         }
-    }
 }
