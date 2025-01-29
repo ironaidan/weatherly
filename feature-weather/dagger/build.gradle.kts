@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.aidannemeth.weatherly.feature.weather.dagger"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 34

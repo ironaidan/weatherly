@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.aidannemeth.weatherly.feature.weather.data"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 34
