@@ -1,3 +1,5 @@
+@file:Suppress("FunctionNaming")
+
 package com.aidannemeth.weatherly.feature.weather.presentation.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -92,7 +94,6 @@ internal fun WeatherScreen(
                 }
                 Button(
                     onClick = actions.refreshWeather,
-                    enabled = state.isRefreshing.not(),
                 ) {
                     Text(text = "Refresh")
                 }
@@ -102,13 +103,10 @@ internal fun WeatherScreen(
 }
 
 object Weather {
-
     data class Actions(
         val refreshWeather: () -> Unit,
     ) {
-
         companion object {
-
             val Empty = Actions(
                 refreshWeather = {},
             )
@@ -124,7 +122,6 @@ fun WeatherScreenPreview() {
         WeatherScreen(
             actions = Weather.Actions.Empty,
             state = WeatherState(
-                isRefreshing = false,
                 weatherMetadataState = WeatherMetadataState.Data(
                     weatherUiModel = WeatherMetadataUiModel(
                         temperature = "100℉",

@@ -2,7 +2,7 @@ package com.aidannemeth.weatherly.feature.weather.data.remote
 
 import com.aidannemeth.weatherly.feature.weather.data.BuildConfig
 import com.aidannemeth.weatherly.feature.weather.data.remote.mapper.toWeather
-import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
+import com.aidannemeth.weatherly.feature.weather.domain.model.Weather
 import com.aidannemeth.weatherly.feature.weather.domain.model.Latitude
 import com.aidannemeth.weatherly.feature.weather.domain.model.Longitude
 import com.aidannemeth.weatherly.feature.weather.domain.model.Units

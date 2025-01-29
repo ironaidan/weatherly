@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt.android)
-    kotlin("kapt")
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -12,17 +12,6 @@ android {
 
     defaultConfig {
         minSdk = 34
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
     }
 
     compileOptions {
@@ -41,8 +30,5 @@ dependencies {
     implementation(projects.featureCommon.data)
     implementation(projects.featureCommon.domain)
     implementation(projects.featureCommon.presentation)
-    kapt(libs.hilt.android.compiler)
-
-    androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
 }

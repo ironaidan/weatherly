@@ -1,13 +1,14 @@
 package com.aidannemeth.weatherly.feature.weather.data.remote.resource
 
+import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class TemperatureResource(
-    val day: Float,
-    val min: Float,
-    val max: Float,
-    val night: Float,
-    val eve: Float,
-    val morn: Float,
+    val day: Temperature,
+    val min: Temperature,
+    val max: Temperature,
+    val night: Temperature,
+    val eve: Temperature,
+    val morn: Temperature,
 )

@@ -1,3 +1,5 @@
+@file:Suppress("FunctionNaming")
+
 package com.aidannemeth.weatherly.navigation
 
 import androidx.compose.foundation.layout.Box

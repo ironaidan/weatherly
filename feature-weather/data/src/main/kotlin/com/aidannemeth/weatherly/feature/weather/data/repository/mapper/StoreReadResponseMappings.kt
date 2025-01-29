@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError
-import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
+import com.aidannemeth.weatherly.feature.weather.domain.model.Weather
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transformLatest

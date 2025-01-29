@@ -1,10 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt.android)
-    kotlin("kapt")
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
     kotlin("plugin.serialization")
 }
 
@@ -23,6 +23,7 @@ android {
             useSupportLibrary = true
         }
     }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -58,11 +59,16 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
-
 dependencies {
+    androidTestImplementation(kotlin("test"))
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.okhttp.mock.webserver)
+    androidTestImplementation(libs.turbine)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.tooling)
     detektPlugins(libs.detekt)
@@ -92,19 +98,9 @@ dependencies {
     implementation(platform(libs.arrow.bom))
     implementation(projects.featureCommon)
     implementation(projects.featureWeather)
-    kapt(libs.hilt.android.compiler)
-    kapt(libs.room.compiler)
-
-    androidTestImplementation(kotlin("test"))
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation(libs.hilt.android.testing)
-    androidTestImplementation(libs.okhttp.mock.webserver)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.turbine)
-    kaptAndroidTest(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.room.compiler)
+    kspAndroidTest(libs.hilt.android.compiler)
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)

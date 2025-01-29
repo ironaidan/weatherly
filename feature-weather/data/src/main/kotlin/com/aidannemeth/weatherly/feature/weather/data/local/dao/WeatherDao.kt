@@ -15,6 +15,9 @@ interface WeatherDao {
     @Query("SELECT * FROM WeatherEntity LIMIT 1")
     fun observe(): Flow<WeatherEntity?>
 
+    @Query("DELETE FROM WeatherEntity")
+    suspend fun deleteAll()
+
     @Query("SELECT COUNT(id) FROM WeatherEntity")
     suspend fun count(): Int
 }

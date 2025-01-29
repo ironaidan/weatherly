@@ -1,41 +1,26 @@
 package com.aidannemeth.weatherly.feature.weather.dagger
 
-import com.aidannemeth.weatherly.feature.weather.data.local.WeatherDatabase
-import com.aidannemeth.weatherly.feature.weather.data.local.WeatherLocalDataSourceImpl
-import com.aidannemeth.weatherly.feature.weather.data.remote.WeatherApi
-import com.aidannemeth.weatherly.feature.weather.data.remote.WeatherRemoteDataSourceImpl
-import com.aidannemeth.weatherly.feature.weather.data.repository.WeatherRepositoryImpl
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherLocalDataSource
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRemoteDataSource
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRepository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object WeatherModule {
-    @Provides
+interface WeatherModule {
+    @Binds
     @Singleton
-    fun provideWeatherLocalDataSource(
-        db: WeatherDatabase,
-    ): WeatherLocalDataSource =
-        WeatherLocalDataSourceImpl(db)
+    fun bindWeatherLocalDataSource(): WeatherLocalDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideWeatherRemoteDataSource(
-        api: WeatherApi,
-    ): WeatherRemoteDataSource =
-        WeatherRemoteDataSourceImpl(api)
+    fun bindWeatherRemoteDataSource(): WeatherRemoteDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideWeatherRepository(
-        weatherLocalDataSource: WeatherLocalDataSource,
-        weatherRemoteDataSource: WeatherRemoteDataSource,
-    ): WeatherRepository =
-        WeatherRepositoryImpl(weatherLocalDataSource, weatherRemoteDataSource)
+    fun bindWeatherRepository(): WeatherRepository
 }

@@ -1,4 +1,4 @@
-package com.aidannemeth.weatherly.feature.weather.domain.entity
+package com.aidannemeth.weatherly.feature.weather.domain.model
 
 data class MinutelyWeather(
     val dt: Long,

@@ -1,10 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt.android)
-    kotlin("kapt")
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -52,6 +52,13 @@ android {
 }
 
 dependencies {
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.tooling)
     detektPlugins(libs.detekt)
@@ -68,16 +75,8 @@ dependencies {
     implementation(projects.featureCommon.domain)
     implementation(projects.featureCommon.presentation)
     implementation(projects.featureWeather.domain)
-    kapt(libs.hilt.android.compiler)
-
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation(libs.hilt.android.testing)
-    androidTestImplementation(libs.mockk.android)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    kaptAndroidTest(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
+    kspAndroidTest(libs.hilt.android.compiler)
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.coroutines.test)

@@ -1,10 +1,19 @@
 package com.aidannemeth.weatherly.feature.weather.presentation.mapper
 
-import com.aidannemeth.weatherly.feature.weather.domain.entity.Weather
+import arrow.core.Either
+import com.aidannemeth.weatherly.feature.common.domain.model.DataError
+import com.aidannemeth.weatherly.feature.weather.domain.model.Weather
+import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherEvent
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataUiModel
 import kotlin.math.roundToInt
 
-fun Weather.toWeatherUiModel(): WeatherMetadataUiModel =
+internal fun Either<DataError, Weather>.toEvent(): WeatherEvent =
+    fold(
+        ifLeft = { WeatherEvent.ErrorLoadingWeather },
+        ifRight = { WeatherEvent.WeatherData(it.toWeatherUiModel()) },
+    )
+
+private fun Weather.toWeatherUiModel(): WeatherMetadataUiModel =
     WeatherMetadataUiModel(
         temperature = "${temperature.value.roundToInt()}℉",
     )

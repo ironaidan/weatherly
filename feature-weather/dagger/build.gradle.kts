@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt.android)
-    kotlin("kapt")
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -36,13 +36,12 @@ android {
 }
 
 dependencies {
+    androidTestImplementation(libs.hilt.android.testing)
     detektPlugins(libs.detekt)
     implementation(libs.hilt.android)
     implementation(projects.featureWeather.data)
     implementation(projects.featureWeather.domain)
     implementation(projects.featureWeather.presentation)
-    kapt(libs.hilt.android.compiler)
-
-    androidTestImplementation(libs.hilt.android.testing)
-    kaptAndroidTest(libs.hilt.android.compiler)
+    ksp(libs.hilt.android.compiler)
+    kspAndroidTest(libs.hilt.android.compiler)
 }

@@ -1,6 +1,5 @@
 package com.aidannemeth.weatherly.feature.weather.data.sample
 
-import com.aidannemeth.weatherly.feature.weather.data.remote.resource.AlertResource
 import com.aidannemeth.weatherly.feature.weather.data.remote.resource.CurrentWeatherResource
 import com.aidannemeth.weatherly.feature.weather.data.remote.resource.DailyWeatherResource
 import com.aidannemeth.weatherly.feature.weather.data.remote.resource.FeelsLikeResource
@@ -9,20 +8,24 @@ import com.aidannemeth.weatherly.feature.weather.data.remote.resource.MinutelyWe
 import com.aidannemeth.weatherly.feature.weather.data.remote.resource.TemperatureResource
 import com.aidannemeth.weatherly.feature.weather.data.remote.resource.WeatherResource
 import com.aidannemeth.weatherly.feature.weather.data.remote.response.WeatherResponse
+import com.aidannemeth.weatherly.feature.weather.domain.model.Latitude
+import com.aidannemeth.weatherly.feature.weather.domain.model.Longitude
+import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 
+@Suppress("LongMethod")
 object WeatherResponseSample {
     fun build() =
         WeatherResponse(
-            latitude = 33.44,
-            longitude = -94.04,
+            latitude = Latitude(value = 33.44),
+            longitude = Longitude(value = -94.04),
             timezone = "America/Chicago",
             timezoneOffset = -18000,
             current = CurrentWeatherResource(
                 dt = 1684929490,
                 sunrise = 1684926645,
                 sunset = 1684977332,
-                temperature = 292.55f,
-                feelsLike = 292.87f,
+                temperature = Temperature(value = 292.55f),
+                feelsLike = Temperature(value = 292.87f),
                 pressure = 1014,
                 humidity = 89,
                 dewPoint = 290.69f,
@@ -31,7 +34,6 @@ object WeatherResponseSample {
                 visibility = 10000,
                 windSpeed = 3.13f,
                 windDirection = 93,
-//                windGust = 6.71f,
                 weather = listOf(
                     WeatherResource(
                         id = 803,
@@ -50,8 +52,8 @@ object WeatherResponseSample {
             hourly = listOf(
                 HourlyWeatherResource(
                     dt = 1684926000,
-                    temperature = 292.01f,
-                    feelsLike = 292.33f,
+                    temperature = Temperature(value = 292.01f),
+                    feelsLike = Temperature(value = 292.33f),
                     pressure = 1014,
                     humidity = 91,
                     dewPoint = 290.51f,
@@ -82,18 +84,18 @@ object WeatherResponseSample {
                     moonPhase = 0.16f,
                     summary = "Expect a day of partly cloudy with rain",
                     temperature = TemperatureResource(
-                        day = 299.03f,
-                        min = 290.69f,
-                        max = 300.35f,
-                        night = 291.45f,
-                        eve = 297.51f,
-                        morn = 292.55f,
+                        day = Temperature(value = 299.03f),
+                        min = Temperature(value = 290.69f),
+                        max = Temperature(value = 300.35f),
+                        night = Temperature(value = 291.45f),
+                        eve = Temperature(value = 297.51f),
+                        morn = Temperature(value = 292.55f),
                     ),
                     feelsLike = FeelsLikeResource(
-                        day = 299.21f,
-                        night = 291.37f,
-                        eve = 297.86f,
-                        morn = 292.87f,
+                        day = Temperature(value = 299.21f),
+                        night = Temperature(value = 291.37f),
+                        eve = Temperature(value = 297.86f),
+                        morn = Temperature(value = 292.87f),
                     ),
                     pressure = 1016,
                     humidity = 59,
@@ -111,28 +113,8 @@ object WeatherResponseSample {
                     ),
                     clouds = 92,
                     pop = 0.47f,
-//                    rain = 0.15f,
                     uvi = 9.23f,
                 )
             ),
-//            alerts = listOf(
-//                AlertResource(
-//                    senderName = "NWS Philadelphia - Mount Holly (New Jersey, Delaware, Southeastern Pennsylvania)",
-//                    event = "Small Craft Advisory",
-//                    start = 1684952747,
-//                    end = 1684988747,
-//                    description = "...SMALL CRAFT ADVISORY REMAINS IN EFFECT FROM 5 PM THIS\n" +
-//                            "AFTERNOON TO 3 AM EST FRIDAY...\n" +
-//                            "* WHAT...North winds 15 to 20 kt with gusts up to 25 kt and seas\n" +
-//                            "3 to 5 ft expected.\n" +
-//                            "* WHERE...Coastal waters from Little Egg Inlet to Great Egg\n" +
-//                            "Inlet NJ out 20 nm, Coastal waters from Great Egg Inlet to\n" +
-//                            "Cape May NJ out 20 nm and Coastal waters from Manasquan Inlet\n" +
-//                            "to Little Egg Inlet NJ out 20 nm.\n" +
-//                            "* WHEN...From 5 PM this afternoon to 3 AM EST Friday.\n" +
-//                            "* IMPACTS...Conditions will be hazardous to small craft.",
-//                    tags = emptyList()
-//                ),
-//            )
         )
 }

@@ -13,14 +13,12 @@ class WeatherReducer @Inject constructor() {
         currentState: WeatherState,
     ): WeatherState = when (operation) {
         is WeatherEvent.WeatherData -> WeatherState(
-            isRefreshing = false,
             weatherMetadataState = WeatherMetadataState.Data(
                 weatherUiModel = operation.payload,
             ),
         )
 
         WeatherEvent.ErrorLoadingWeather -> currentState.copy(
-            isRefreshing = false,
             weatherMetadataState = when (currentState.weatherMetadataState) {
                 is WeatherMetadataState.Data -> currentState.weatherMetadataState
                 WeatherMetadataState.Loading,
@@ -29,6 +27,7 @@ class WeatherReducer @Inject constructor() {
                 )
             }
         )
-        WeatherAction.RefreshWeather -> currentState.copy(isRefreshing = true)
+
+        WeatherAction.RefreshWeather -> currentState
     }
 }

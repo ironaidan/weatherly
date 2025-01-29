@@ -1,5 +1,6 @@
 package com.aidannemeth.weatherly.feature.weather.data.remote.resource
 
+import com.aidannemeth.weatherly.feature.weather.domain.model.Temperature
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,9 +10,9 @@ data class CurrentWeatherResource(
     val sunrise: Long,
     val sunset: Long,
     @SerialName("temp")
-    val temperature: Float,
+    val temperature: Temperature,
     @SerialName("feels_like")
-    val feelsLike: Float,
+    val feelsLike: Temperature,
     val pressure: Int,
     val humidity: Int,
     @SerialName("dew_point")
@@ -23,7 +24,5 @@ data class CurrentWeatherResource(
     val windSpeed: Float,
     @SerialName("wind_deg")
     val windDirection: Int,
-//    @SerialName("wind_gust")
-//    val windGust: Float?, // not present in all responses
     val weather: List<WeatherResource>,
 )
