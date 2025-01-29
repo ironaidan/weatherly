@@ -11,7 +11,6 @@ import com.aidannemeth.weatherly.feature.weather.domain.sample.WeatherSample
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.runner.RunWith
@@ -23,19 +22,17 @@ import kotlin.test.Test
 class RefreshWeatherTest(
     private val testInput: Either<DataError.Remote, Weather>
 ) {
-    private val dispatcher = StandardTestDispatcher()
-
     private val weatherRepository = mockk<WeatherRepository>()
 
     private lateinit var refreshWeatherUseCase: RefreshWeather
 
     @BeforeTest
     fun setup() {
-        refreshWeatherUseCase = RefreshWeather(dispatcher, weatherRepository)
+        refreshWeatherUseCase = RefreshWeather(weatherRepository)
     }
 
     @Test
-    fun `refresh weather returns expected response`() = runTest(dispatcher) {
+    fun `refresh weather returns expected response`() = runTest {
         val expected = testInput
         coEvery { weatherRepository.refreshWeather() } returns expected
 
@@ -50,41 +47,41 @@ class RefreshWeatherTest(
         @JvmStatic
         @Parameterized.Parameters
         fun data(): List<Either<DataError.Remote, Weather>> = listOf(
-                WeatherSample.build().right(),
-                DataError.Remote.Http(
-                    networkError = NetworkError.Forbidden,
-                    apiErrorInfo = "HTTP 403 Client Error",
-                ).left(),
-                DataError.Remote.Http(
-                    networkError = NetworkError.NoNetwork,
-                    apiErrorInfo = "unexpected end of stream",
-                ).left(),
-                DataError.Remote.Http(
-                    networkError = NetworkError.NotFound,
-                    apiErrorInfo = "HTTP 404 Client Error",
-                ).left(),
-                DataError.Remote.Http(
-                    networkError = NetworkError.ServerError,
-                    apiErrorInfo = "HTTP 500 Server Error",
-                ).left(),
-                DataError.Remote.Http(
-                    networkError = NetworkError.Unauthorized,
-                    apiErrorInfo = "HTTP 401 Client Error",
-                ).left(),
-                DataError.Remote.Http(
-                    networkError = NetworkError.Parse,
-                    apiErrorInfo = "apiErrorInfo",
-                ).left(),
-                DataError.Remote.Http(
-                    networkError = NetworkError.BadRequest,
-                    apiErrorInfo = "HTTP 400 Client Error",
-                ).left(),
-                DataError.Remote.Http(
-                    networkError = NetworkError.Unknown,
-                    apiErrorInfo = "apiErrorInfo",
-                ).left(),
-                DataError.Remote.NoNewData.left(),
-                DataError.Remote.Unknown.left(),
+            WeatherSample.build().right(),
+            DataError.Remote.Http(
+                networkError = NetworkError.Forbidden,
+                apiErrorInfo = "HTTP 403 Client Error",
+            ).left(),
+            DataError.Remote.Http(
+                networkError = NetworkError.NoNetwork,
+                apiErrorInfo = "unexpected end of stream",
+            ).left(),
+            DataError.Remote.Http(
+                networkError = NetworkError.NotFound,
+                apiErrorInfo = "HTTP 404 Client Error",
+            ).left(),
+            DataError.Remote.Http(
+                networkError = NetworkError.ServerError,
+                apiErrorInfo = "HTTP 500 Server Error",
+            ).left(),
+            DataError.Remote.Http(
+                networkError = NetworkError.Unauthorized,
+                apiErrorInfo = "HTTP 401 Client Error",
+            ).left(),
+            DataError.Remote.Http(
+                networkError = NetworkError.Parse,
+                apiErrorInfo = "apiErrorInfo",
+            ).left(),
+            DataError.Remote.Http(
+                networkError = NetworkError.BadRequest,
+                apiErrorInfo = "HTTP 400 Client Error",
+            ).left(),
+            DataError.Remote.Http(
+                networkError = NetworkError.Unknown,
+                apiErrorInfo = "apiErrorInfo",
+            ).left(),
+            DataError.Remote.NoNewData.left(),
+            DataError.Remote.Unknown.left(),
         )
     }
 }

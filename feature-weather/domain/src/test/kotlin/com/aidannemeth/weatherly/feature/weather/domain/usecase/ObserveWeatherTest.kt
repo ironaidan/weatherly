@@ -20,8 +20,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ObserveWeatherTest {
-    private val dispatcher = StandardTestDispatcher()
-
     private val weatherRepository = mockk<WeatherRepository>()
 
     private lateinit var observeWeather: ObserveWeather
@@ -32,11 +30,11 @@ class ObserveWeatherTest {
 
     @BeforeTest
     fun setup() {
-        observeWeather = ObserveWeather(dispatcher, weatherRepository)
+        observeWeather = ObserveWeather(weatherRepository)
     }
 
     @Test
-    fun `observe weather returns weather when existing in repository`() = runTest(dispatcher) {
+    fun `observe weather returns weather when existing in repository`() = runTest {
         expected = weather.right()
         every { weatherRepository.observeWeather() } returns flowOf(expected)
 
@@ -48,7 +46,7 @@ class ObserveWeatherTest {
     }
 
     @Test
-    fun `observe weather returns data error when not existing in repository`() = runTest(dispatcher) {
+    fun `observe weather returns data error when not existing in repository`() = runTest {
         expected = NoCachedData.left()
         every { weatherRepository.observeWeather() } returns flowOf(expected)
 
@@ -60,7 +58,7 @@ class ObserveWeatherTest {
     }
 
     @Test
-    fun `observe weather emits weather and observes updates`() = runTest(dispatcher) {
+    fun `observe weather emits weather and observes updates`() = runTest {
         val firstExpected = NoCachedData.left()
         val secondExpected = weather.right()
         val expectedFlow = flowOf(firstExpected, secondExpected)
