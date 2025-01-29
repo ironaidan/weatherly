@@ -56,7 +56,7 @@ class WeatherApiTest {
         server.shutdown()
     }
 
-    @Test()
+    @Test
     fun when_get_weather_called_then_correct_method_and_path_used() =
         runTest {
             val mockResponse = MockResponse().setBody(json)
@@ -98,7 +98,7 @@ class WeatherApiTest {
         runTest {
             val mockResponse = MockResponse().apply {
                 setBody(json)
-                throttleBody(1024, 1, TimeUnit.SECONDS);
+                throttleBody(1024, 1, TimeUnit.SECONDS)
             }
             server.enqueue(mockResponse)
 
