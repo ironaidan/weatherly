@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
     kotlin("plugin.serialization")
 }
 
@@ -56,6 +57,14 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+
+    ksp {
+        arg("room.generateKotlin", "true")
+    }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 }
 

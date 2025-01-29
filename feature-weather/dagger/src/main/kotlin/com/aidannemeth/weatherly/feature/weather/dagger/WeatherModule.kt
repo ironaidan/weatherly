@@ -1,5 +1,8 @@
 package com.aidannemeth.weatherly.feature.weather.dagger
 
+import com.aidannemeth.weatherly.feature.weather.data.local.WeatherLocalDataSourceImpl
+import com.aidannemeth.weatherly.feature.weather.data.remote.WeatherRemoteDataSourceImpl
+import com.aidannemeth.weatherly.feature.weather.data.repository.WeatherRepositoryImpl
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherLocalDataSource
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRemoteDataSource
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRepository
@@ -14,13 +17,19 @@ import javax.inject.Singleton
 interface WeatherModule {
     @Binds
     @Singleton
-    fun bindWeatherLocalDataSource(): WeatherLocalDataSource
+    fun bindWeatherLocalDataSource(
+        impl: WeatherLocalDataSourceImpl,
+    ): WeatherLocalDataSource
 
     @Binds
     @Singleton
-    fun bindWeatherRemoteDataSource(): WeatherRemoteDataSource
+    fun bindWeatherRemoteDataSource(
+        impl: WeatherRemoteDataSourceImpl,
+    ): WeatherRemoteDataSource
 
     @Binds
     @Singleton
-    fun bindWeatherRepository(): WeatherRepository
+    fun bindWeatherRepository(
+        impl: WeatherRepositoryImpl,
+    ): WeatherRepository
 }
