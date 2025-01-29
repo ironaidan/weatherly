@@ -1,5 +1,7 @@
 package com.aidannemeth.weatherly.feature.weather.presentation.reducer
 
+import com.aidannemeth.weatherly.feature.common.presentation.model.TextUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.R
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherAction
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherEvent
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
@@ -23,7 +25,7 @@ class WeatherReducer @Inject constructor() {
                 is WeatherMetadataState.Data -> currentState.weatherMetadataState
                 WeatherMetadataState.Loading,
                 is WeatherMetadataState.Error -> WeatherMetadataState.Error(
-                    message = "Error loading weather",
+                    message = TextUiModel(R.string.loading_error_message),
                 )
             }
         )

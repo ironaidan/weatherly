@@ -23,11 +23,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_7_PRO
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.aidannemeth.weatherly.feature.common.presentation.model.TextUiModel
+import com.aidannemeth.weatherly.feature.common.presentation.model.string
 import com.aidannemeth.weatherly.feature.common.presentation.theme.WeatherlyTheme
+import com.aidannemeth.weatherly.feature.weather.presentation.R
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherAction
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataUiModel
@@ -79,23 +83,23 @@ internal fun WeatherScreen(
                         )
 
                         is WeatherMetadataState.Data -> Text(
-                            text = targetState.weatherUiModel.temperature,
+                            text = targetState.weatherUiModel.temperature.string(),
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.titleLarge,
                         )
 
                         is WeatherMetadataState.Error ->
-                            LaunchedEffect(targetState) {
-                                snackbarHostState.showSnackbar(
-                                    message = targetState.message,
-                                )
+                            targetState.message.string().let { message ->
+                                LaunchedEffect(targetState) {
+                                    snackbarHostState.showSnackbar(message)
+                                }
                             }
                     }
                 }
                 Button(
                     onClick = actions.refreshWeather,
                 ) {
-                    Text(text = "Refresh")
+                    Text(text = stringResource(R.string.cta_text))
                 }
             }
         }
@@ -124,7 +128,7 @@ fun WeatherScreenPreview() {
             state = WeatherState(
                 weatherMetadataState = WeatherMetadataState.Data(
                     weatherUiModel = WeatherMetadataUiModel(
-                        temperature = "100℉",
+                        temperature = TextUiModel("100℉"),
                     )
                 ),
             ),

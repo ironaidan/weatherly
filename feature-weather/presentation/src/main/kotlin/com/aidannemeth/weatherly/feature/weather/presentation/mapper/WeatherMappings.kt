@@ -2,6 +2,7 @@ package com.aidannemeth.weatherly.feature.weather.presentation.mapper
 
 import arrow.core.Either
 import com.aidannemeth.weatherly.feature.common.domain.model.DataError
+import com.aidannemeth.weatherly.feature.common.presentation.model.TextUiModel
 import com.aidannemeth.weatherly.feature.weather.domain.model.Weather
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherEvent
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataUiModel
@@ -15,5 +16,5 @@ internal fun Either<DataError, Weather>.toEvent(): WeatherEvent =
 
 private fun Weather.toWeatherUiModel(): WeatherMetadataUiModel =
     WeatherMetadataUiModel(
-        temperature = "${temperature.value.roundToInt()}℉",
+        temperature = TextUiModel("${temperature.value.roundToInt()}℉"),
     )
