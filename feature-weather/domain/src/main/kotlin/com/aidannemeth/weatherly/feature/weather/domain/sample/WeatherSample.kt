@@ -13,4 +13,12 @@ object WeatherSample {
         timezoneOffset = -18000,
         temperature = Temperature(value = 292.55f),
     )
+
+    fun buildIncreasedTemperature() = Weather(
+        latitude = Latitude(value = 33.44),
+        longitude = Longitude(value = -94.04),
+        timezone = "America/Chicago",
+        timezoneOffset = -18000,
+        temperature = Temperature(value = 293.55f),
+    )
 }

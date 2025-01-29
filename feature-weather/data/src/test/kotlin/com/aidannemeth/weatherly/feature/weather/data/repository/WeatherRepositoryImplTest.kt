@@ -1,55 +1,58 @@
 package com.aidannemeth.weatherly.feature.weather.data.repository
 
 import app.cash.turbine.test
-import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherLocalDataSource
-import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRemoteDataSource
+import arrow.core.right
+import com.aidannemeth.weatherly.feature.weather.data.sample.WeatherLocalDataSourceTestFake
+import com.aidannemeth.weatherly.feature.weather.data.sample.WeatherRemoteDataSourceTestFake
 import com.aidannemeth.weatherly.feature.weather.domain.sample.WeatherSample
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class WeatherRepositoryImplTest {
-    private val weather = WeatherSample.build()
+    private val dispatcher = StandardTestDispatcher()
 
-    private val weatherLocalDataSource = mockk<WeatherLocalDataSource> {
-        every { observeWeather() } returns flowOf(weather)
-    }
+    private val weatherLocalDataSource = WeatherLocalDataSourceTestFake()
 
-    private val weatherRemoteDataSource = mockk<WeatherRemoteDataSource> {
-        coEvery { getWeather() } returns weather
-    }
+    private val weatherRemoteDataSource = WeatherRemoteDataSourceTestFake()
 
-    private lateinit var weatherRepository: WeatherRepositoryImpl
-
-    @BeforeTest
-    fun setup() {
-        weatherRepository = WeatherRepositoryImpl(
-            weatherLocalDataSource,
-            weatherRemoteDataSource,
+    private val weatherRepository: WeatherRepositoryImpl by lazy {
+        WeatherRepositoryImpl(
+            dispatcher = dispatcher,
+            weatherLocalDataSource = weatherLocalDataSource,
+            weatherRemoteDataSource = weatherRemoteDataSource,
         )
     }
 
-    @Test
-    fun `observe weather interacts with all data sources`() = runTest {
-        weatherRepository.observeWeather().test {
-            verify { weatherLocalDataSource.observeWeather() }
-            coVerify { weatherLocalDataSource.insertWeather(any()) }
-            coVerify { weatherRemoteDataSource.getWeather() }
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
+    private val cachedWeather = WeatherSample.build()
+
+    private val remoteWeather = WeatherSample.buildIncreasedTemperature()
 
     @Test
-    fun `refresh weather interacts with all data sources`() = runTest {
-        weatherRepository.refreshWeather()
-        verify { weatherLocalDataSource.observeWeather() }
-        coVerify { weatherLocalDataSource.insertWeather(any()) }
-        coVerify { weatherRemoteDataSource.getWeather() }
+    fun `given cache, when observe weather called, then return cache then remote`() =
+        runTest(dispatcher) {
+            weatherRepository.observeWeather().test {
+                assertEquals(cachedWeather.right(), awaitItem())
+                assertEquals(remoteWeather.right(), awaitItem())
+            }
+        }
+
+    @Test
+    fun `given no cache, when observe weather called, then return null then remote`() =
+        runTest(dispatcher) {
+            weatherLocalDataSource.weatherFlow.value = null
+            weatherRepository.observeWeather().test {
+                assertEquals(remoteWeather.right(), awaitItem())
+            }
+        }
+
+    @Test
+    fun `given 200, when refresh weather called, then return remote`() =
+        runTest(dispatcher) {
+        val expected = remoteWeather.right()
+
+        val actual = weatherRepository.refreshWeather()
+        assertEquals(expected, actual)
     }
 }

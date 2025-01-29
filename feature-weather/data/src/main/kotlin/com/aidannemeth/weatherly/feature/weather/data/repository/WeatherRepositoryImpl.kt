@@ -37,9 +37,6 @@ class WeatherRepositoryImpl @Inject constructor(
                 writer = { _: WeatherKey, weather: Weather ->
                     weatherLocalDataSource.insertWeather(weather)
                 },
-                deleteAll = {
-                    weatherLocalDataSource.deleteAll()
-                }
             )
         ).build()
 

@@ -17,9 +17,6 @@ class WeatherLocalDataSourceImpl @Inject constructor(
     @DefaultDispatcher private val dispatcher: CoroutineDispatcher,
     private val db: WeatherDatabase,
 ) : WeatherLocalDataSource {
-    override suspend fun deleteAll() =
-        db.weatherDao().deleteAll()
-
     override suspend fun insertWeather(weather: Weather) =
         withContext(dispatcher) {
             db.weatherDao().insert(weather.toEntity())

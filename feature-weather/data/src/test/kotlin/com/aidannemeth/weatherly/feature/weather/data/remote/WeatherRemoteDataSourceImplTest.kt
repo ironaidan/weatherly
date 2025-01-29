@@ -1,51 +1,51 @@
 package com.aidannemeth.weatherly.feature.weather.data.remote
 
-import com.aidannemeth.weatherly.feature.weather.data.remote.mapper.toWeather
 import com.aidannemeth.weatherly.feature.weather.data.sample.WeatherResponseSample
 import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRemoteDataSource
+import com.aidannemeth.weatherly.feature.weather.domain.sample.WeatherSample
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertThrows
 import java.io.IOException
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class WeatherRemoteDataSourceImplTest {
+    private val dispatcher = StandardTestDispatcher()
+
     private val weatherApi = mockk<WeatherApi>()
 
-    private lateinit var weatherRemoteDataSource: WeatherRemoteDataSource
+    private val weatherRemoteDataSource: WeatherRemoteDataSource by lazy {
+        WeatherRemoteDataSourceImpl(dispatcher, weatherApi)
+    }
+
+    private val weather = WeatherSample.build()
 
     private val weatherResponse = WeatherResponseSample.build()
 
-    @BeforeTest
-    fun setup() {
-        weatherRemoteDataSource = WeatherRemoteDataSourceImpl(weatherApi)
-    }
+    @Test
+    fun `given 200, when get weather called, then return weather`() =
+        runTest(dispatcher) {
+            val expected = weather
+            coEvery { weatherApi.getWeather(any(), any(), any(), any()) } returns weatherResponse
+
+            val actual = weatherRemoteDataSource.getWeather()
+
+            assertEquals(expected, actual)
+            coVerify { weatherApi.getWeather(any(), any(), any(), any()) }
+        }
 
     @Test
-    fun `get weather returns weather from network when successful`() = runTest {
-        val expected = weatherResponse.toWeather()
-        coEvery { weatherApi.getWeather(any(), any(), any(), any()) } returns weatherResponse
+    fun `given exception, when get weather called, then throw exception`() =
+        runTest(dispatcher) {
+            coEvery { weatherApi.getWeather(any(), any(), any(), any()) } throws IOException()
 
-        val actual = weatherRemoteDataSource.getWeather()
-
-        assertEquals(expected, actual)
-        coVerify { weatherApi.getWeather(any(), any(), any(), any()) }
-    }
-
-    @Test
-    fun `get weather throws exception when api throws exception`() = runTest {
-        coEvery { weatherApi.getWeather(any(), any(), any(), any()) } throws IOException()
-
-        assertThrows(IOException::class.java) {
-            runBlocking {
+            assertFailsWith<IOException> {
                 weatherRemoteDataSource.getWeather()
             }
+            coVerify { weatherApi.getWeather(any(), any(), any(), any()) }
         }
-        coVerify { weatherApi.getWeather(any(), any(), any(), any()) }
-    }
 }

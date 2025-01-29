@@ -11,6 +11,6 @@ object WeatherEntitySample {
         longitude = Longitude(value = -94.04),
         timezone = "America/Chicago",
         timezoneOffset = -18000,
-        temperature = Temperature(value = 0.0f),
+        temperature = Temperature(value = 292.55f),
     )
 }
