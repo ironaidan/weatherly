@@ -5,7 +5,9 @@ import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import com.aidannemeth.weatherly.feature.common.presentation.model.TextUiModel
 import com.aidannemeth.weatherly.feature.common.presentation.theme.WeatherlyTheme
+import com.aidannemeth.weatherly.feature.weather.presentation.R
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataUiModel
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherState
@@ -23,7 +25,6 @@ class WeatherTest {
                 WeatherScreen(
                     state = WeatherState(
                         weatherMetadataState = WeatherMetadataState.Loading,
-                        isRefreshing = false,
                     ),
                     actions = Weather.Actions.Empty,
                 )
@@ -41,10 +42,9 @@ class WeatherTest {
                     state = WeatherState(
                         weatherMetadataState = WeatherMetadataState.Data(
                             WeatherMetadataUiModel(
-                                temperature = "100",
+                                temperature = TextUiModel(value = "100"),
                             )
                         ),
-                        isRefreshing = false,
                     ),
                     actions = Weather.Actions.Empty,
                 )
@@ -61,15 +61,16 @@ class WeatherTest {
             WeatherlyTheme {
                 WeatherScreen(
                     state = WeatherState(
-                        weatherMetadataState = WeatherMetadataState.Error("Something went wrong"),
-                        isRefreshing = false,
+                        weatherMetadataState = WeatherMetadataState.Error(
+                            message = TextUiModel(R.string.loading_error_message),
+                        ),
                     ),
                     actions = Weather.Actions.Empty,
                 )
             }
         }
 
-        composeTestRule.onNodeWithText("Something went wrong").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Error loading weather").assertIsDisplayed()
         composeTestRule.onNodeWithTag("LoadingIndicator").assertIsNotDisplayed()
     }
 }
