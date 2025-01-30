@@ -14,7 +14,7 @@ internal fun Either<DataError, Weather>.toEvent(): WeatherEvent =
         ifRight = { WeatherEvent.WeatherData(it.toWeatherUiModel()) },
     )
 
-private fun Weather.toWeatherUiModel(): WeatherMetadataUiModel =
+internal fun Weather.toWeatherUiModel(): WeatherMetadataUiModel =
     WeatherMetadataUiModel(
         temperature = TextUiModel("${temperature.value.roundToInt()}℉"),
     )

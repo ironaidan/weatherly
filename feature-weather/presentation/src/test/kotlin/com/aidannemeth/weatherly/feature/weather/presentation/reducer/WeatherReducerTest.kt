@@ -1,5 +1,7 @@
 package com.aidannemeth.weatherly.feature.weather.presentation.reducer
 
+import com.aidannemeth.weatherly.feature.common.presentation.model.TextUiModel
+import com.aidannemeth.weatherly.feature.weather.presentation.R
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherAction
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherEvent
 import com.aidannemeth.weatherly.feature.weather.presentation.model.WeatherMetadataState
@@ -26,78 +28,69 @@ class WeatherReducerTest(
     }
 
     companion object {
-
         private val weatherUiModel = WeatherUiModelSample.build()
-        private val updatedWeatherUiModel = weatherUiModel.copy(temperature = "101")
+        private val updatedWeatherUiModel = weatherUiModel.copy(temperature = TextUiModel("101"))
 
         private val transitionsFromLoadingState = listOf(
             TestInput(
-                currentState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Loading,
-                    isRefreshing = false,
-                ),
+                currentState = WeatherState.Loading,
                 operation = WeatherEvent.WeatherData(weatherUiModel),
                 expectedState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
-                    isRefreshing = false,
                 ),
             ),
             TestInput(
-                currentState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Loading,
-                    isRefreshing = false,
-                ),
+                currentState = WeatherState.Loading,
                 operation = WeatherEvent.ErrorLoadingWeather,
                 expectedState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
-                    isRefreshing = false,
+                    weatherMetadataState = WeatherMetadataState.Error(
+                        message = TextUiModel(R.string.loading_error_message)
+                    ),
                 ),
             ),
             TestInput(
-                currentState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Loading,
-                    isRefreshing = false,
-                ),
+                currentState = WeatherState.Loading,
                 operation = WeatherAction.RefreshWeather,
-                expectedState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Loading,
-                    isRefreshing = true,
-                ),
+                expectedState = WeatherState.Loading,
             ),
         )
 
         private val transitionsFromErrorState = listOf(
             TestInput(
                 currentState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
-                    isRefreshing = false,
+                    weatherMetadataState = WeatherMetadataState.Error(
+                        message = TextUiModel(R.string.loading_error_message),
+                    ),
                 ),
                 operation = WeatherEvent.WeatherData(weatherUiModel),
                 expectedState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
-                    isRefreshing = false,
                 ),
             ),
             TestInput(
                 currentState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
-                    isRefreshing = false,
+                    weatherMetadataState = WeatherMetadataState.Error(
+                        message = TextUiModel(R.string.loading_error_message),
                     ),
+                ),
                 operation = WeatherEvent.ErrorLoadingWeather,
                 expectedState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
-                    isRefreshing = false,
+                    weatherMetadataState = WeatherMetadataState.Error(
+                        message = TextUiModel(R.string.loading_error_message),
+                    ),
                 )
             ),
             TestInput(
                 currentState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
-                    isRefreshing = false,
+                    weatherMetadataState = WeatherMetadataState.Error(
+                        message = TextUiModel(R.string.loading_error_message),
                     ),
+                ),
                 operation = WeatherAction.RefreshWeather,
                 expectedState = WeatherState(
-                    weatherMetadataState = WeatherMetadataState.Error("Error loading weather"),
-                    isRefreshing = true,
+                    weatherMetadataState = WeatherMetadataState.Error(
+                        message = TextUiModel(R.string.loading_error_message),
+                    ),
                 )
             ),
         )
@@ -106,34 +99,28 @@ class WeatherReducerTest(
             TestInput(
                 currentState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
-                    isRefreshing = false,
                 ),
                 operation = WeatherEvent.WeatherData(updatedWeatherUiModel),
                 expectedState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Data(updatedWeatherUiModel),
-                    isRefreshing = false,
                 ),
             ),
             TestInput(
                 currentState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
-                    isRefreshing = false,
                 ),
                 operation = WeatherEvent.ErrorLoadingWeather,
                 expectedState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
-                    isRefreshing = false,
                 )
             ),
             TestInput(
                 currentState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
-                    isRefreshing = false,
                 ),
                 operation = WeatherAction.RefreshWeather,
                 expectedState = WeatherState(
                     weatherMetadataState = WeatherMetadataState.Data(weatherUiModel),
-                    isRefreshing = true,
                 )
             ),
         )
