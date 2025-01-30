@@ -31,7 +31,7 @@ fun Flow<StoreReadResponse<Weather>>.mapToEither(): Flow<Either<DataError, Weath
             is Loading -> Unit
             is NoNewData -> TODO()
         }
-}
+    }
 
 fun Data<Weather>.dataToEither() =
     dataOrNull()?.right() ?: toDataError().left()

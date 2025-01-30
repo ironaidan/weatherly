@@ -1,3 +1,5 @@
+@file:Suppress("FunctionNaming")
+
 package com.aidannemeth.weatherly.feature.common.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme

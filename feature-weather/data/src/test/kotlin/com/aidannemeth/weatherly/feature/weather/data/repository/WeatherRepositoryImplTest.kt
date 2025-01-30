@@ -50,9 +50,9 @@ class WeatherRepositoryImplTest {
     @Test
     fun `given 200, when refresh weather called, then return remote`() =
         runTest(dispatcher) {
-        val expected = remoteWeather.right()
+            val expected = remoteWeather.right()
 
-        val actual = weatherRepository.refreshWeather()
-        assertEquals(expected, actual)
-    }
+            val actual = weatherRepository.refreshWeather()
+            assertEquals(expected, actual)
+        }
 }

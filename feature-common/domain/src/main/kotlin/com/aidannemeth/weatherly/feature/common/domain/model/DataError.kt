@@ -6,8 +6,6 @@ sealed interface DataError {
 
         data object NoCachedData : Local
 
-        data object DbWriteFailed : Local
-
         data object OutOfMemory : Local
 
         data object Unknown : Local
@@ -20,7 +18,7 @@ sealed interface DataError {
             val apiErrorInfo: String? = null,
         ) : Remote
 
-        data object NoNewData: Remote
+        data object NoNewData : Remote
 
         data object Unknown : Remote
     }
