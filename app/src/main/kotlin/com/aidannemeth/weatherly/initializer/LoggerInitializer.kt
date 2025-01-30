@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.aidannemeth.weatherly.initializer
 
 import android.content.Context

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.aidannemeth.weatherly.feature.weather.domain.model
 
 enum class Units {

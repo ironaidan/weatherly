@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.aidannemeth.weatherly.feature.weather.dagger
 
 import com.aidannemeth.weatherly.feature.weather.data.local.WeatherLocalDataSourceImpl
