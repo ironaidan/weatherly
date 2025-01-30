@@ -5,7 +5,7 @@ import com.aidannemeth.weatherly.feature.weather.domain.repository.WeatherRemote
 import com.aidannemeth.weatherly.feature.weather.domain.sample.WeatherSample
 
 class WeatherRemoteDataSourceTestFake : WeatherRemoteDataSource {
-    var weather = WeatherSample.buildIncreasedTemperature()
+    private val weather = WeatherSample.buildIncreasedTemperature()
 
     override suspend fun getWeather(): Weather =
         weather
